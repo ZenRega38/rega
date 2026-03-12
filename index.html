@@ -743,6 +743,105 @@
             font-style: italic;
         }
 
+        /* --- Certification Link --- */
+        .cert-link-wrapper {
+            margin-top: 30px;
+            display: flex;
+            justify-content: flex-start; /* Anda bisa ubah jadi flex-end jika ingin di kanan */
+        }
+
+        .cert-link {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: inline-block; /* Diperlukan agar efek scale/zoom bisa bekerja */
+            position: relative;
+            transition: transform 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .cert-link:hover {
+            transform: scale(1.05); /* Efek zoom in */
+            color: var(--text-main); /* Warnanya jadi lebih terang */
+        }
+
+        /* Garis bawah animasi */
+        .cert-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--text-main);
+            transition: width 0.3s ease;
+        }
+
+        .cert-link:hover::after {
+            width: 100%; /* Garis memanjang penuh saat di-hover */
+        }
+
+        /* --- Interactive Resume Tabs Section --- */
+        .resume-header {
+            display: flex;
+            align-items: flex-end; /* Diubah agar sejajar di bawah, mencegah lompat vertikal saat ukuran huruf berubah */
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            overflow: hidden; /* Mencegah ada yang tembus ke luar layar saat meluncur */
+        }
+
+        .resume-tab {
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+            line-height: 1;
+            /* Transisi font & warna. (Transisi posisi 'transform' akan di-handle JS FLIP) */
+            transition: font-size 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease, color 0.6s ease;
+        }
+
+        .resume-tab.active-tab {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-right: auto; /* Mendorong tab lain ke kanan */
+            order: -1;
+        }
+
+        .resume-tab.inactive-tab {
+            font-size: 1rem;
+            color: var(--text-muted);
+            opacity: 0.4;
+            margin-left: 20px;
+            padding-bottom: 2px; /* Penyesuaian garis bawah dengan teks besar */
+        }
+
+        .resume-tab.inactive-tab:hover {
+            opacity: 0.9;
+            color: var(--accent);
+        }
+
+        /* --- Transisi Konten (Timeline) --- */
+        .resume-pane {
+            display: none; 
+            animation: slideUpFade 0.5s ease forwards;
+        }
+
+        .resume-pane.active-pane {
+            display: block; 
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -776,49 +875,113 @@
             <a href="#contact" class="btn">Get in Touch</a>
         </header>
 
-        <section id="experience" class="reveal">
-            <h2 class="section-title">Experience</h2>
-            <div class="timeline">
+        <section id="resume" class="reveal">
+            
+            <div class="resume-header">
+                <div class="resume-tab active-tab" onclick="switchTab('pane-experience')">Experience</div>
+                <div class="resume-tab inactive-tab" onclick="switchTab('pane-education')">Education</div>
+                <div class="resume-tab inactive-tab" onclick="switchTab('pane-language')">Language Proficiency</div>
+            </div>
+
+            <div class="resume-content-container">
                 
-                <div class="timeline-item">
-                    <div class="timeline-date">Jan 2025 - Feb 2025</div>
-                    <div class="timeline-content">
-                        <h3>Project Manager Intern</h3>
-                        <h4>BMKG Tarakan</h4>
-                        <p>Managing BMKG Tarakan's new responsive website development for public real-time weather and natural disaster alerts. Assisting in Frontend and API development.</p>
+                <div id="pane-experience" class="resume-pane active-pane">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Jan 2025 - Feb 2025</div>
+                            <div class="timeline-content">
+                                <h3>Project Management Intern</h3>
+                                <h4>BMKG Tarakan</h4>
+                                <p>Managing BMKG Tarakan's new responsive website development for public real-time weather and natural disaster alerts. Assisting in Frontend and API development.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Jul 2024 - Present</div>
+                            <div class="timeline-content">
+                                <h3>Master Teacher</h3>
+                                <h4>Brain Academy by Ruangguru</h4>
+                                <p>Teaching Informatics, English, Civic and Social Education at Indonesia's largest technology company focused on education-based services.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Jun 2024 - Present</div>
+                            <div class="timeline-content">
+                                <h3>Freelance AI Photo Annotator</h3>
+                                <h4>TELUS International</h4>
+                                <p>Responsible for annotating photos for AI training purposes at a Vancouver-based AI company.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2023 - 2024</div>
+                            <div class="timeline-content">
+                                <h3>Lead & Initiator</h3>
+                                <h4>Google Developer Student Clubs (GDSC) - UBT</h4>
+                                <p>Initiated the first ever GDSC in North Kalimantan. Led multiple training sessions, collaborations, and served as the official Tech Fest 2024 representative.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="timeline-item">
-                    <div class="timeline-date">Jul 2024 - Present</div>
-                    <div class="timeline-content">
-                        <h3>Master Teacher</h3>
-                        <h4>Brain Academy by Ruangguru</h4>
-                        <p>Teaching Informatics, English, Civic and Social Education at Indonesia's largest technology company focused on education-based services.</p>
+                <div id="pane-education" class="resume-pane">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">2022 - Present</div>
+                            <div class="timeline-content">
+                                <h3>Universitas Borneo Tarakan</h3>
+                                <h4>Computer Engineering (3.6 GPA)</h4>
+                                <p>Final year student. Awardee of Pertamina Foundation and Fab Foundation Scholarship. Actively preparing for thesis proposal seminar.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2019 - 2024</div>
+                            <div class="timeline-content">
+                                <h3>Dicoding Academy</h3>
+                                <h4>4x Scholarship Recipient</h4>
+                                <p>Extensively studying Mobile Development, AI, and Software Engineering frameworks.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">2019 - 2022</div>
+                            <div class="timeline-content">
+                                <h3>SMK IDN Boarding School Bogor</h3>
+                                <h4>Software Engineering (3.7 GPA)</h4>
+                                <p>Graduated with Honors Equivalent. Served as Secretary of Language Division at the Students Council.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="timeline-item">
-                    <div class="timeline-date">Jun 2024 - Present</div>
-                    <div class="timeline-content">
-                        <h3>Freelance AI Photo Annotator</h3>
-                        <h4>TELUS International</h4>
-                        <p>Responsible for annotating photos for AI training purposes at a Vancouver-based AI company.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">2023 - 2024</div>
-                    <div class="timeline-content">
-                        <h3>Lead & Initiator</h3>
-                        <h4>Google Developer Student Clubs (GDSC) - UBT</h4>
-                        <p>Initiated the first ever GDSC in North Kalimantan. Led multiple training sessions, collaborations, and served as the official Tech Fest 2024 representative.</p>
+                <div id="pane-language" class="resume-pane">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-date">Native</div>
+                            <div class="timeline-content">
+                                <h3>Indonesian</h3>
+                                <h4>Mother Tongue</h4>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Fluent</div>
+                            <div class="timeline-content">
+                                <h3>English</h3>
+                                <h4>Professional Working Proficiency</h4>
+                                <p>Acted as Official Interpreter for Tech Fest HMTK-UBT and various international academic events.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-date">Basic</div>
+                            <div class="timeline-content">
+                                <h3>French</h3>
+                                <h4>Elementary / Learning</h4>
+                                <p>Currently learning and practicing basic vocabulary and daily conversation.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </section>
-        </div>
+    </div>
         
 
         <section id="gallery" class="gallery-section reveal">
@@ -1251,6 +1414,11 @@
                         <div class="skill-pill">Git & Version Control</div>
                         <div class="skill-pill">IoT & Electronics</div>
                     </div>
+                    
+                    <div class="cert-link-wrapper">
+                        <a href="https://drive.google.com/drive/folders/15sbSvJcpDUPHc9fgPz7MEAyW2BlBKVEj" class="cert-link">See Certifications &rarr;</a>
+                    </div>
+                    
                 </section>
             </div>
         </section>
@@ -1588,6 +1756,60 @@
                 scrollToCard(currentIndex + 1);
             });
         });
+
+        // Fungsi untuk menukar Tab dengan Animasi FLIP (Meluncur Mulus Saling Silang)
+        function switchTab(targetId) {
+            const header = document.querySelector('.resume-header');
+            const tabs = Array.from(header.querySelectorAll('.resume-tab'));
+            const clickedTab = document.querySelector(`.resume-tab[onclick="switchTab('${targetId}')"]`);
+
+            // Abaikan jika tab yang diklik sudah aktif
+            if (clickedTab.classList.contains('active-tab')) return;
+
+            // 1. FIRST: Catat posisi X (kiri) asli semua tab sebelum bertukar tempat
+            const firstPositions = tabs.map(tab => tab.getBoundingClientRect().left);
+
+            // 2. Lakukan perubahan DOM (Ubah status aktif & tidak aktif)
+            tabs.forEach(tab => {
+                tab.classList.remove('active-tab');
+                tab.classList.add('inactive-tab');
+            });
+            clickedTab.classList.remove('inactive-tab');
+            clickedTab.classList.add('active-tab');
+
+            // 3. LAST: Catat posisi X (kiri) baru setelah letaknya pindah di HTML
+            const lastPositions = tabs.map(tab => tab.getBoundingClientRect().left);
+
+            // 4. INVERT & PLAY: Tarik mundur tab ke posisi lama, lalu luncurkan ke posisi baru
+            tabs.forEach((tab, index) => {
+                const deltaX = firstPositions[index] - lastPositions[index];
+                
+                // Pindahkan secara instan ke posisi lama (tanpa animasi)
+                tab.style.transition = 'none';
+                tab.style.transform = `translateX(${deltaX}px)`;
+
+                // Paksa browser membaca letak yang baru sebelum dianimasikan
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        // Nyalakan kembali transisi dan luncurkan tab ke titik akhir secara mulus
+                        tab.style.transition = 'transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), font-size 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.5s ease, color 1.5s ease';
+                        tab.style.transform = 'translateX(0)';
+                    });
+                });
+            });
+
+            // --- Reset & Mainkan Animasi untuk Konten Timeline di bawahnya ---
+            document.querySelectorAll('.resume-pane').forEach(pane => {
+                pane.classList.remove('active-pane');
+                pane.style.animation = 'none'; 
+            });
+
+            const targetPane = document.getElementById(targetId);
+            targetPane.classList.add('active-pane');
+            // Trigger reflow agar animasi konten bisa diulang
+            void targetPane.offsetWidth;
+            targetPane.style.animation = 'slideUpFade 0.5s ease forwards';
+        }
     </script>
 </body>
 </html>
