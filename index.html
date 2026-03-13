@@ -782,6 +782,39 @@
             width: 100%; /* Garis memanjang penuh saat di-hover */
         }
 
+        /* --- Gallery Mobile Toggle --- */
+        .gallery-toggle-wrapper {
+            display: none; /* Sembunyikan tombol secara default (di Desktop) */
+            justify-content: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        /* --- Project Toggle --- */
+        .project-toggle-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        /* Class khusus untuk menyembunyikan project */
+        .project-card.hidden-project {
+            display: none;
+        }
+
+        /* Class khusus untuk menyembunyikan item galeri lewat JavaScript */
+        .masonry-item.hidden-on-mobile {
+            display: none;
+        }
+
+        /* Hanya tampilkan tombol jika layar berukuran HP/Tablet kecil */
+        @media (max-width: 768px) {
+            .gallery-toggle-wrapper {
+                display: flex;
+            }
+        }
+
         /* --- Interactive Resume Tabs Section --- */
         .resume-header {
             display: flex;
@@ -1388,6 +1421,10 @@
                     </div>
                 </div>
             </div>
+
+            <div class="gallery-toggle-wrapper">
+                <a href="#" class="cert-link" id="gallery-toggle-btn">See more &rarr;</a>
+            </div>
         </section>
 
         <section id="projects" class="reveal">
@@ -1395,16 +1432,16 @@
                 <h2 class="section-title">Selected Projects</h2>
             </div>
             <div class="project-grid">
-
                 <a href="#" class="project-card">
                     <img src="assets/img/AI-in-Human-Animal-Communication.jpg" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>AI in Human-Animal Communication</h3>
-                        <p>Android application to track Covid-19 cases globally, utilizing APIs to display daily cases, recoveries, and integrated graphs.</p>
+                        <p>Building AI to bridge understanding between Human-Animal vocal communnication for future partnership.</p>
                         <div class="tech-stack">
-                            <span class="tech-tag">Renewable Energy</span>
-                            <span class="tech-tag">Sustainability</span>
-                            <span class="tech-tag">Green Economy</span>
+                            <span class="tech-tag">CNN</span>
+                            <span class="tech-tag">STFT</span>
+                            <span class="tech-tag">Transformer</span>
+                            <span class="tech-tag">Google Colab</span>
                         </div>
                     </div>
                 </a>
@@ -1413,9 +1450,10 @@
                     <img src="assets/img/DEB-Sobat-Bumi-UBT-Pertamina.webp" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>Self-Sufficient Energy Village</h3>
-                        <p>Android application to track Covid-19 cases globally, utilizing APIs to display daily cases, recoveries, and integrated graphs.</p>
+                        <p>To help seaweed farmers process their harvest faster and cheaper using the renewable energy oven that we built from scratch.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Renewable Energy</span>
+                            <span class="tech-tag">Solar Panel</span>
                             <span class="tech-tag">Sustainability</span>
                             <span class="tech-tag">Green Economy</span>
                         </div>
@@ -1478,7 +1516,7 @@
                     <img src="assets/img/Araa-Clothing-Store.png" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>Araa Clothing Store</h3>
-                        <p>Android application to track Covid-19 cases globally, utilizing APIs to display daily cases, recoveries, and integrated graphs.</p>
+                        <p>Develop database system for marketplace app that has all of the features you need in a clothing marketplace.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">MySQL</span>
                             <span class="tech-tag">CSV</span>
@@ -1492,9 +1530,12 @@
                     <img src="assets/img/instaclone.png" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>Global Covid Tracker</h3>
-                        <p>Android application to track Covid-19 cases globally, utilizing APIs to display daily cases, recoveries, and integrated graphs.</p>
+                        <p>Android application that has all of the instagram features to study of how it works.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Android</span>
+                            <span class="tech-tag">Kotlin</span>
+                            <span class="tech-tag">Firebase</span>
+                            <span class="tech-tag">Database</span>
                             <span class="tech-tag">API Integration</span>
                         </div>
                     </div>
@@ -1507,12 +1548,18 @@
                         <p>Android application to track Covid-19 cases globally, utilizing APIs to display daily cases, recoveries, and integrated graphs.</p>
                         <div class="tech-stack">
                             <span class="tech-tag">Android</span>
+                            <span class="tech-tag">Kotlin</span>
                             <span class="tech-tag">API Integration</span>
                         </div>
                     </div>
                 </a>
 
             </div>
+
+            </div> <div class="project-toggle-wrapper">
+                <a href="#" class="cert-link" id="project-toggle-btn">See more &rarr;</a>
+            </div>
+
             <div class="container2">
                 <section id="skills" class="reveal" style="margin-top: 50px;">
                     <h2 class="section-title">Skills & Tools</h2>
@@ -1910,6 +1957,163 @@
             void targetPane.offsetWidth;
             targetPane.style.animation = 'slideUpFade 1.5s ease forwards';
         }
+
+        // --- Logika Filter Galeri Mobile berdasarkan ALT ---
+        let isGalleryExpanded = false;
+
+        // Kita tambahkan parameter 'e' (event) untuk mendeteksi apakah ini dari klik
+        function handleGalleryMobile(e) {
+            const items = document.querySelectorAll('.masonry-item');
+            const toggleBtn = document.getElementById('gallery-toggle-btn');
+            const wrapper = document.querySelector('.gallery-toggle-wrapper');
+            
+            const isMobile = window.innerWidth <= 768; 
+
+            if (!isMobile) {
+                // Mode Desktop
+                items.forEach(item => {
+                    item.classList.remove('hidden-on-mobile');
+                    item.style.animation = 'none'; // Bersihkan animasi
+                });
+                if (wrapper) wrapper.style.display = 'none';
+                return;
+            }
+
+            if (wrapper) wrapper.style.display = 'flex';
+            
+            if (isGalleryExpanded) {
+                // --- MODE: SEE MORE (Tampilkan Semua) ---
+                items.forEach(item => {
+                    if (item.classList.contains('hidden-on-mobile')) {
+                        item.classList.remove('hidden-on-mobile');
+                        // Tambahkan animasi meluncur masuk (menggunakan keyframe yang sudah ada)
+                        item.style.animation = 'none';
+                        void item.offsetWidth; // Trik memancing browser mereset animasi
+                        item.style.animation = 'slideUpFade 0.6s ease forwards';
+                    }
+                });
+                toggleBtn.innerHTML = '&larr; See less'; // Panah di kiri
+                
+                // Jika dipicu oleh klik, scroll mulus ke atas galeri agar user melihat foto barunya
+                if (e && e.type === 'click') {
+                    setTimeout(() => {
+                        const gallerySection = document.getElementById('gallery');
+                        if (gallerySection) {
+                            // Angka 80 adalah jarak (offset) agar tidak tertutup navbar atas
+                            const y = gallerySection.getBoundingClientRect().top + window.scrollY - 80;
+                            window.scrollTo({ top: y, behavior: 'smooth' });
+                        }
+                    }, 50);
+                }
+
+            } else {
+                // --- MODE: SEE LESS (Filter Gambar) ---
+                const seenAlts = new Set();
+                
+                items.forEach(item => {
+                    const img = item.querySelector('img');
+                    const altText = img ? img.getAttribute('alt') : '';
+                    
+                    if (seenAlts.has(altText)) {
+                        item.classList.add('hidden-on-mobile');
+                        item.style.animation = 'none';
+                    } else {
+                        seenAlts.add(altText);
+                        item.classList.remove('hidden-on-mobile');
+                    }
+                });
+                toggleBtn.innerHTML = 'See more &rarr;'; // Panah di kanan
+                
+                // Scroll kembali ke atas galeri saat ditutup agar view tidak berantakan
+                if (e && e.type === 'click') {
+                    setTimeout(() => {
+                        const gallerySection = document.getElementById('gallery');
+                        if (gallerySection) {
+                            const y = gallerySection.getBoundingClientRect().top + window.scrollY - 80;
+                            window.scrollTo({ top: y, behavior: 'smooth' });
+                        }
+                    }, 50);
+                }
+            }
+        }
+
+        // Jalankan saat tombol diklik
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('gallery-toggle-btn');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    isGalleryExpanded = !isGalleryExpanded; 
+                    handleGalleryMobile(e); // Lempar event klik ke dalam fungsi
+                });
+            }
+            
+            handleGalleryMobile();
+            window.addEventListener('resize', () => handleGalleryMobile());
+        });
+
+        // --- Logika Batas 3 Project ---
+        let isProjectExpanded = false;
+
+        function handleProjectToggle(e) {
+            const projects = document.querySelectorAll('.project-card');
+            const toggleBtn = document.getElementById('project-toggle-btn');
+            if (!toggleBtn) return;
+
+            if (isProjectExpanded) {
+                // --- MODE: SEE MORE (Tampilkan Semua) ---
+                projects.forEach((project, index) => {
+                    if (project.classList.contains('hidden-project')) {
+                        project.classList.remove('hidden-project');
+                        // Animasi memudar dan meluncur dari bawah
+                        project.style.animation = 'none';
+                        void project.offsetWidth; 
+                        project.style.animation = 'slideUpFade 0.6s ease forwards';
+                    }
+                });
+                toggleBtn.innerHTML = '&larr; See less'; // Panah pindah ke kiri
+                
+            } else {
+                // --- MODE: SEE LESS (Tampilkan 3 saja) ---
+                projects.forEach((project, index) => {
+                    // Index dimulai dari 0. Jadi index 0, 1, 2 akan lolos (3 item pertama)
+                    if (index >= 3) { 
+                        project.classList.add('hidden-project');
+                        project.style.animation = 'none';
+                    } else {
+                        project.classList.remove('hidden-project');
+                    }
+                });
+                toggleBtn.innerHTML = 'See more &rarr;'; // Panah di kanan
+                
+                // Jika dipicu oleh klik "See less", scroll otomatis ke atas bagian project
+                if (e && e.type === 'click') {
+                    setTimeout(() => {
+                        const projectSection = document.getElementById('projects');
+                        if (projectSection) {
+                            // Scroll ke judul "Selected Projects"
+                            const y = projectSection.getBoundingClientRect().top + window.scrollY - 80;
+                            window.scrollTo({ top: y, behavior: 'smooth' });
+                        }
+                    }, 50);
+                }
+            }
+        }
+
+        // Pasang event listener saat website selesai dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            const projectBtn = document.getElementById('project-toggle-btn');
+            if (projectBtn) {
+                projectBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    isProjectExpanded = !isProjectExpanded;
+                    handleProjectToggle(e); // Lempar event agar fitur auto-scroll bekerja
+                });
+            }
+            
+            // Inisialisasi saat web pertama dibuka (sembunyikan project ke-4 dan seterusnya)
+            handleProjectToggle();
+        });
     </script>
 </body>
 </html>
