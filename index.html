@@ -9,12 +9,12 @@
 
     <meta property="og:title" content="Rega R. Azizan - AI Engineer & Developer">
     <meta property="og:description" content="Portfolio of Rega Rizkan Azizan. Let's build something great together.">
-    <meta property="og:image" content="https://zenrega.my.id/assets/img/logo.png">
+    <meta property="og:image" content="https://zenrega.my.id/assets/img/logo.webp">
     <meta property="og:url" content="https://zenrega.my.id">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="aftJDLDGkgU3eZe4FMNv5cavBQP7zeKYcmLhfrRY398" />
-    <link rel="icon" type="image/png" href="assets/img/logo.png">
+    <link rel="icon" type="image/png" href="assets/img/logo.webp">
     <style>
         :root {
             --bg-color: #09090b;
@@ -1114,6 +1114,226 @@
                 font-size: 0.8rem;
             }
         }
+
+        /* ═══════════════════════════════════════════════════════════ */
+        /*  CERTIFICATES SECTION                                       */
+        /* ═══════════════════════════════════════════════════════════ */
+        .cert-section {
+            width: 100%;
+            padding: 60px 0 80px;
+            background: var(--bg-color);
+        }
+
+        .cert-section-inner {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* ── Filter Tabs ────────────────────────────────────────── */
+        .cert-filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .cert-tab {
+            padding: 8px 20px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-family: var(--font-sans);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .cert-tab:hover {
+            border-color: var(--text-muted);
+            color: var(--text-main);
+            background: rgba(255,255,255,0.04);
+        }
+
+        .cert-tab.active {
+            background: var(--text-main);
+            color: var(--bg-color);
+            border-color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* ── Masonry Grid ───────────────────────────────────────── */
+        .cert-grid {
+            column-count: 4;
+            column-gap: 16px;
+        }
+
+        @media (max-width: 1200px) { .cert-grid { column-count: 3; } }
+        @media (max-width: 820px)  { .cert-grid { column-count: 2; } }
+        @media (max-width: 480px)  { .cert-grid { column-count: 1; } }
+
+        /* ── Individual Card ────────────────────────────────────── */
+        .cert-card {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            border-radius: 14px;
+            overflow: visible; /* allow transform shadow to bleed */
+            cursor: pointer;
+            /* 3-D perspective per card */
+            perspective: 800px;
+            transform-style: preserve-3d;
+        }
+
+        .cert-card.cert-hidden {
+            display: none;
+        }
+
+        .cert-card-inner {
+            position: relative;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            transition:
+                box-shadow 0.35s ease,
+                border-color 0.35s ease,
+                transform 0.1s ease;
+            will-change: transform;
+        }
+
+        .cert-card-inner img {
+            width: 100%;
+            height: auto;
+            display: block;
+            /* grayscale default, colorise on hover */
+            filter: brightness(0.72) grayscale(0.2);
+            transition: filter 0.4s ease;
+        }
+
+        /* Hover state */
+        .cert-card:hover .cert-card-inner {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        .cert-card:hover .cert-card-inner img {
+            filter: brightness(1) grayscale(0);
+        }
+
+        /* ── Card Overlay Labels ────────────────────────────────── */
+        .cert-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px 14px 14px;
+            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: none;
+        }
+
+        .cert-card:hover .cert-card-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cert-card-cat {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+
+        .cert-card-label {
+            font-size: 0.82rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* ── Lightbox ───────────────────────────────────────────── */
+        .cert-lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+        }
+
+        .cert-lightbox.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .cert-lightbox-close {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, transform 0.2s ease;
+            z-index: 10001;
+        }
+
+        .cert-lightbox-close:hover {
+            background: rgba(255,255,255,0.18);
+            transform: scale(1.1);
+        }
+
+        .cert-lightbox-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            max-width: min(90vw, 900px);
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .cert-lightbox.open .cert-lightbox-body {
+            transform: scale(1) translateY(0);
+        }
+
+        .cert-lightbox-body img {
+            max-width: 100%;
+            max-height: 82vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+        }
+
+        .cert-lightbox-title {
+            color: rgba(255,255,255,0.75);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -1127,6 +1347,7 @@
             <a href="#resume">Experience</a>
             <a href="#projects">Projects</a>
             <a href="#skills">Skills</a>
+            <a href="#certifications">Certificates</a>
             <a href="#contact">Contact</a>
         </div>
     </nav>
@@ -1135,7 +1356,7 @@
         <div class="container2">
             <header id="home" class="hero reveal">
                 <div class="sticker-wrapper">
-                    <img src="assets/img/logo.png" alt="Personal Sticker" class="sticker-image">
+                    <img src="assets/img/logo.webp" alt="Personal Sticker" class="sticker-image">
                 </div>
                 <h1>Hi, I'm Rega Rizkan Azizan, B.Eng.</h1>
                 <p>Freshly graduated Computer Engineering student, AI Engineer, UI/UX enthusiast, developer with
@@ -1328,7 +1549,7 @@
             <div class="masonry-grid">
 
                 <div class="masonry-item">
-                    <img src="assets/img/SumoBot1.jpg" alt="Technocorner">
+                    <img src="assets/img/SumoBot1.webp" alt="Technocorner">
                     <div class="photo-overlay">
                         <span class="photo-title">SumoBot Competition</span>
                         <span class="photo-desc">Technocorner by Universitas Gadjah Mada</span>
@@ -1336,7 +1557,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/SumoBot2.jpg" alt="Technocorner">
+                    <img src="assets/img/SumoBot2.webp" alt="Technocorner">
                     <div class="photo-overlay">
                         <span class="photo-title">SumoBot Competition</span>
                         <span class="photo-desc">Technocorner by Universitas Gadjah Mada</span>
@@ -1344,7 +1565,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/SumoBot3.jpg" alt="Technocorner">
+                    <img src="assets/img/SumoBot3.webp" alt="Technocorner">
                     <div class="photo-overlay">
                         <span class="photo-title">SumoBot Competition</span>
                         <span class="photo-desc">Technocorner by Universitas Gadjah Mada</span>
@@ -1352,7 +1573,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/Web-Training1.JPG" alt="Training">
+                    <img src="assets/img/Web-Training1.webp" alt="Training">
                     <div class="photo-overlay">
                         <span class="photo-title">Web Development Trainer</span>
                         <span class="photo-desc">SMK Darul Muslim, Bogor</span>
@@ -1360,7 +1581,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/Web-Training2.jpg" alt="Training">
+                    <img src="assets/img/Web-Training2.webp" alt="Training">
                     <div class="photo-overlay">
                         <span class="photo-title">Web Development Trainer</span>
                         <span class="photo-desc">SMK Darul Muslim, Bogor</span>
@@ -1368,7 +1589,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/Web-Training3.JPG" alt="Training">
+                    <img src="assets/img/Web-Training3.webp" alt="Training">
                     <div class="photo-overlay">
                         <span class="photo-title">Web Development Trainer</span>
                         <span class="photo-desc">SMK Darul Muslim, Bogor</span>
@@ -1376,7 +1597,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/Web-Training4.JPG" alt="Training">
+                    <img src="assets/img/Web-Training4.webp" alt="Training">
                     <div class="photo-overlay">
                         <span class="photo-title">Web Development Trainer</span>
                         <span class="photo-desc">SMK Darul Muslim, Bogor</span>
@@ -1384,7 +1605,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/DKiT.jpg" alt="DkIT">
+                    <img src="assets/img/DKiT.webp" alt="DkIT">
                     <div class="photo-overlay">
                         <span class="photo-title">Dundalk Institute of Technology</span>
                         <span class="photo-desc">Offered a place at DkIT, Dundalk, Ireland</span>
@@ -1392,7 +1613,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/AYIMUN6.jpg" alt="AYIMUN">
+                    <img src="assets/img/AYIMUN6.webp" alt="AYIMUN">
                     <div class="photo-overlay">
                         <span class="photo-title">AYIMUN Bali 2022</span>
                         <span class="photo-desc">UNESCO Delegate, general speaker session</span>
@@ -1400,7 +1621,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/AYIMUN3.JPG" alt="AYIMUN">
+                    <img src="assets/img/AYIMUN3.webp" alt="AYIMUN">
                     <div class="photo-overlay">
                         <span class="photo-title">AYIMUN Bali 2022</span>
                         <span class="photo-desc">UNESCO Forum, forming alliance</span>
@@ -1408,7 +1629,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/AYIMUN5.jpg" alt="AYIMUN">
+                    <img src="assets/img/AYIMUN5.webp" alt="AYIMUN">
                     <div class="photo-overlay">
                         <span class="photo-title">AYIMUN Bali 2022</span>
                         <span class="photo-desc">UNESCO Forum, got cheered by the Iraq Delegation</span>
@@ -1416,7 +1637,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/AYIMUN4.JPG" alt="AYIMUN">
+                    <img src="assets/img/AYIMUN4.webp" alt="AYIMUN">
                     <div class="photo-overlay">
                         <span class="photo-title">AYIMUN Bali 2022</span>
                         <span class="photo-desc">UNESCO Forum, motion voting session</span>
@@ -1424,7 +1645,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/AYIMUN2.jpg" alt="AYIMUN">
+                    <img src="assets/img/AYIMUN2.webp" alt="AYIMUN">
                     <div class="photo-overlay">
                         <span class="photo-title">AYIMUN Bali 2022</span>
                         <span class="photo-desc">Vacayyyyy!!!</span>
@@ -1432,7 +1653,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/AYIMUN-Cultural.jpg" alt="AYIMUN">
+                    <img src="assets/img/AYIMUN-Cultural.webp" alt="AYIMUN">
                     <div class="photo-overlay">
                         <span class="photo-title">AYIMUN Bali 2022</span>
                         <span class="photo-desc">Best Cultural Performance Team!</span>
@@ -1440,7 +1661,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/AYIMUN1.jpg" alt="AYIMUN">
+                    <img src="assets/img/AYIMUN1.webp" alt="AYIMUN">
                     <div class="photo-overlay">
                         <span class="photo-title">AYIMUN Bali 2022</span>
                         <span class="photo-desc">Cultural Night</span>
@@ -1448,7 +1669,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC1.jpg" alt="GDSC Summit">
+                    <img src="assets/img/GDSC1.webp" alt="GDSC Summit">
                     <div class="photo-overlay">
                         <span class="photo-title">Google DSC Summit 2023</span>
                         <span class="photo-desc">Community Training Delegate, Google Office, Jakarta</span>
@@ -1456,7 +1677,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC2.jpg" alt="GDSC Summit">
+                    <img src="assets/img/GDSC2.webp" alt="GDSC Summit">
                     <div class="photo-overlay">
                         <span class="photo-title">Google DSC Summit 2023</span>
                         <span class="photo-desc">Focus Group Discussion</span>
@@ -1464,7 +1685,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC3.jpg" alt="GDSC Summit">
+                    <img src="assets/img/GDSC3.webp" alt="GDSC Summit">
                     <div class="photo-overlay">
                         <span class="photo-title">Google DSC Summit 2023</span>
                         <span class="photo-desc">Focus Group Discussion</span>
@@ -1472,7 +1693,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC4.jpg" alt="GDSC Summit">
+                    <img src="assets/img/GDSC4.webp" alt="GDSC Summit">
                     <div class="photo-overlay">
                         <span class="photo-title">Google DSC Summit 2023</span>
                         <span class="photo-desc">Group Photo!</span>
@@ -1480,7 +1701,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC5.jpg" alt="GDSC Summit">
+                    <img src="assets/img/GDSC5.webp" alt="GDSC Summit">
                     <div class="photo-overlay">
                         <span class="photo-title">Google DSC Summit 2023</span>
                         <span class="photo-desc">Speaker Session</span>
@@ -1488,7 +1709,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT1.jpeg" alt="GDSC Summit">
+                    <img src="assets/img/GDSC-UBT1.webp" alt="GDSC Summit">
                     <div class="photo-overlay">
                         <span class="photo-title">GDSC-UBT #1 Info Session</span>
                         <span class="photo-desc">Keynote Speaker</span>
@@ -1496,7 +1717,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT6.jpg" alt="Info Session">
+                    <img src="assets/img/GDSC-UBT6.webp" alt="Info Session">
                     <div class="photo-overlay">
                         <span class="photo-title">GDSC-UBT #1 Info Session</span>
                         <span class="photo-desc">Group Photo!</span>
@@ -1504,7 +1725,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT9.jpg" alt="Flutter Training">
+                    <img src="assets/img/GDSC-UBT9.webp" alt="Flutter Training">
                     <div class="photo-overlay">
                         <span class="photo-title">GDSC-UBT Flutter Training</span>
                         <span class="photo-desc">in collaborations with IDNBS, Universitas Borneo Tarakan</span>
@@ -1512,7 +1733,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT8.jpg" alt="Flutter Training">
+                    <img src="assets/img/GDSC-UBT8.webp" alt="Flutter Training">
                     <div class="photo-overlay">
                         <span class="photo-title">GDSC-UBT Flutter Training</span>
                         <span class="photo-desc">in collaborations with IDNBS, Universitas Borneo Tarakan</span>
@@ -1520,7 +1741,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/IISMA.jpg" alt="IISMA">
+                    <img src="assets/img/IISMA.webp" alt="IISMA">
                     <div class="photo-overlay">
                         <span class="photo-title">IISMA LoA</span>
                         <span class="photo-desc">University of Sussex, Brighton, UK</span>
@@ -1528,7 +1749,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT2.jpeg" alt="TechFest">
+                    <img src="assets/img/GDSC-UBT2.webp" alt="TechFest">
                     <div class="photo-overlay">
                         <span class="photo-title">TechFest 2024</span>
                         <span class="photo-desc">Official Interpreter</span>
@@ -1536,7 +1757,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT3.jpeg" alt="TechFest">
+                    <img src="assets/img/GDSC-UBT3.webp" alt="TechFest">
                     <div class="photo-overlay">
                         <span class="photo-title">TechFest 2024</span>
                         <span class="photo-desc">Awarding Session</span>
@@ -1544,7 +1765,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT4.jpeg" alt="TechFest">
+                    <img src="assets/img/GDSC-UBT4.webp" alt="TechFest">
                     <div class="photo-overlay">
                         <span class="photo-title">TechFest 2024</span>
                         <span class="photo-desc">Group Photo with South Korean Google Developer Expert for AI/ML!</span>
@@ -1552,7 +1773,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/GDSC-UBT5.jpg" alt="TechFest">
+                    <img src="assets/img/GDSC-UBT5.webp" alt="TechFest">
                     <div class="photo-overlay">
                         <span class="photo-title">TechFest 2024</span>
                         <span class="photo-desc">After Party with Sung Min Han!</span>
@@ -1560,7 +1781,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF.jpg" alt="World Water Forum">
+                    <img src="assets/img/10WWF.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">Youth and Student Delegate</span>
@@ -1569,7 +1790,7 @@
 
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF1.jpg" alt="World Water Forum">
+                    <img src="assets/img/10WWF1.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">with the Coordinating Minister for Maritime Affairs and Investment,
@@ -1579,7 +1800,7 @@
 
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF2.jpg" alt="World Water Forum">
+                    <img src="assets/img/10WWF2.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">with Jeremy Owhen!</span>
@@ -1588,7 +1809,7 @@
 
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF3.jpg" alt="World Water Forum">
+                    <img src="assets/img/10WWF3.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">with Cinta Laura Kiehl</span>
@@ -1597,7 +1818,7 @@
 
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF4.JPG" alt="World Water Forum">
+                    <img src="assets/img/10WWF4.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">with the Minister of Public Works and Public Housing, Dr. (H.C.) Ir. H.
@@ -1607,7 +1828,7 @@
 
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF5.jpg" alt="World Water Forum">
+                    <img src="assets/img/10WWF5.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">Youth and Student Delegate</span>
@@ -1615,7 +1836,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF6.jpg" alt="World Water Forum">
+                    <img src="assets/img/10WWF6.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">Youth and Student Delegate</span>
@@ -1623,7 +1844,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/10WWF7.jpg" alt="World Water Forum">
+                    <img src="assets/img/10WWF7.webp" alt="World Water Forum">
                     <div class="photo-overlay">
                         <span class="photo-title">10th World Water Forum</span>
                         <span class="photo-desc">with the President of the World Water Council, Mr. Loïc Fauchon</span>
@@ -1631,7 +1852,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG1.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG1.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">Weather Balloon, Juwata International Airport, Tarakan</span>
@@ -1639,7 +1860,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG2.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG2.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">Weather Forecasting</span>
@@ -1647,7 +1868,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG3.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG3.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">MAWS Maintenance, Malundung Port, Tarakan</span>
@@ -1655,7 +1876,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG4.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG4.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">Weather Forecasting</span>
@@ -1663,7 +1884,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG5.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG5.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">BMKG Tarakan Web Development</span>
@@ -1671,7 +1892,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG6.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG6.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">Project Manager Intern</span>
@@ -1679,7 +1900,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG7.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG7.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">My Luv &lt;3 as the UI/UX Designer Intern</span>
@@ -1687,7 +1908,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG8.jpg" alt="BMKG">
+                    <img src="assets/img/BMKG8.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">Project Manager Intern</span>
@@ -1695,7 +1916,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/BMKG9.png" alt="BMKG">
+                    <img src="assets/img/BMKG9.webp" alt="BMKG">
                     <div class="photo-overlay">
                         <span class="photo-title">BMKG Tarakan</span>
                         <span class="photo-desc">Project Manager Intern</span>
@@ -1703,7 +1924,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/HMTK1.jpeg" alt="HMTK">
+                    <img src="assets/img/HMTK1.webp" alt="HMTK">
                     <div class="photo-overlay">
                         <span class="photo-title">HMTK Anniversary</span>
                         <span class="photo-desc">Moderator</span>
@@ -1711,7 +1932,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/Mangrove.jpg" alt="Mangrove">
+                    <img src="assets/img/Mangrove.webp" alt="Mangrove">
                     <div class="photo-overlay">
                         <span class="photo-title">KKMB Tarakan</span>
                         <span class="photo-desc">with Jasper and Hidde from Royal Haskoning DHV</span>
@@ -1719,7 +1940,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/sidang_akhir.png" alt="SIDANG">
+                    <img src="assets/img/sidang_akhir.webp" alt="SIDANG">
                     <div class="photo-overlay">
                         <span class="photo-title">Thesis Defence</span>
                         <span class="photo-desc">Decoding Animal Vocal Communication using AI</span>
@@ -1727,7 +1948,7 @@
                 </div>
 
                 <div class="masonry-item">
-                    <img src="assets/img/UEO.png" alt="MSC">
+                    <img src="assets/img/UEO.webp" alt="MSC">
                     <div class="photo-overlay">
                         <span class="photo-title">University of Edinburgh</span>
                         <span class="photo-desc">MSc Cognitive Science 26/27 Offer</span>
@@ -1746,7 +1967,7 @@
             </div>
             <div class="project-grid">
                 <a href="#" class="project-card">
-                    <img src="assets/img/AI-in-Human-Animal-Communication.jpg" alt="Covid Tracker" class="project-img">
+                    <img src="assets/img/AI-in-Human-Animal-Communication.webp" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>AI in Human-Animal Communication</h3>
                         <p>Building AI to bridge understanding between Human-Animal vocal communnication for future
@@ -1777,7 +1998,7 @@
                 </a>
 
                 <a href="#" class="project-card">
-                    <img src="assets/img/BMKG-Web-Project-Progress-Presentation.jpg" alt="BMKG Website"
+                    <img src="assets/img/BMKG-Web-Project-Progress-Presentation.webp" alt="BMKG Website"
                         class="project-img">
                     <div class="project-info">
                         <h3>BMKG Tarakan's Website</h3>
@@ -1792,7 +2013,7 @@
                 </a>
 
                 <a href="#" class="project-card">
-                    <img src="assets/img/HidroNet-Team.jpg" alt="HidroNet" class="project-img">
+                    <img src="assets/img/HidroNet-Team.webp" alt="HidroNet" class="project-img">
                     <div class="project-info">
                         <h3>HidroNet</h3>
                         <p>Engineered an IoT device from scratch alongside a mobile and website app to help hydroponic
@@ -1806,7 +2027,7 @@
                 </a>
 
                 <a href="#" class="project-card">
-                    <img src="assets/img/FaithFlow.png" alt="Covid Tracker" class="project-img">
+                    <img src="assets/img/FaithFlow.webp" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>FaithFlow</h3>
                         <p>Web application to assist and streamline Christian worships preparation in an app.</p>
@@ -1819,7 +2040,7 @@
                 </a>
 
                 <a href="#" class="project-card">
-                    <img src="assets/img/Automatic-Garage-Lamp.PNG" alt="Covid Tracker" class="project-img">
+                    <img src="assets/img/Automatic-Garage-Lamp.webp" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>Automatic Garage Lamp</h3>
                         <p>Sensors and Actuators implementation to automate lamp usage to help save energy that function
@@ -1833,7 +2054,7 @@
                 </a>
 
                 <a href="#" class="project-card">
-                    <img src="assets/img/Araa-Clothing-Store.png" alt="Covid Tracker" class="project-img">
+                    <img src="assets/img/Araa-Clothing-Store.webp" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>Araa Clothing Store</h3>
                         <p>Develop database system for marketplace app that has all of the features you need in a
@@ -1848,7 +2069,7 @@
                 </a>
 
                 <a href="#" class="project-card">
-                    <img src="assets/img/instaclone.png" alt="Covid Tracker" class="project-img">
+                    <img src="assets/img/instaclone.webp" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>Global Covid Tracker</h3>
                         <p>Android application that has all of the instagram features to study of how it works.</p>
@@ -1863,7 +2084,7 @@
                 </a>
 
                 <a href="#" class="project-card">
-                    <img src="assets/img/covid_tracker.png" alt="Covid Tracker" class="project-img">
+                    <img src="assets/img/covid_tracker.webp" alt="Covid Tracker" class="project-img">
                     <div class="project-info">
                         <h3>Global Covid Tracker</h3>
                         <p>Android application to track Covid-19 cases globally, utilizing APIs to display daily cases,
@@ -1896,10 +2117,469 @@
                 <div class="skill-pill">IoT & Electronics</div>
             </div>
 
-            <div class="cert-link-wrapper">
+
+            <div class="cert-link-wrapper" style="display:none;">
                 <a href="https://drive.google.com/drive/folders/15sbSvJcpDUPHc9fgPz7MEAyW2BlBKVEj" class="cert-link">See
                     Certifications &rarr;</a>
             </div>
+
+        </section>
+    </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!--  CERTIFICATES SECTION                                          -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <section id="certifications" class="cert-section reveal">
+        <div class="cert-section-inner">
+            <div style="text-align:center; margin-bottom: 40px;">
+                <h2 class="section-title">Certifications</h2>
+                <p style="color:var(--text-muted); font-size:0.95rem; margin-top: 8px;">Click any certificate to view full size</p>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="cert-filter-tabs" id="cert-tabs">
+                <button class="cert-tab active" data-cat="all" onclick="filterCerts('all')">All</button>
+                <button class="cert-tab" data-cat="Community" onclick="filterCerts('Community')">Community</button>
+                <button class="cert-tab" data-cat="Competitions" onclick="filterCerts('Competitions')">Competitions</button>
+                <button class="cert-tab" data-cat="Programming" onclick="filterCerts('Programming')">Programming</button>
+                <button class="cert-tab" data-cat="International" onclick="filterCerts('International')">International</button>
+                <button class="cert-tab" data-cat="Scholarship" onclick="filterCerts('Scholarship')">Scholarship</button>
+                <button class="cert-tab" data-cat="Language" onclick="filterCerts('Language')">Language</button>
+                <button class="cert-tab" data-cat="Seminar" onclick="filterCerts('Seminar')">Seminar</button>
+                <button class="cert-tab" data-cat="Webinar" onclick="filterCerts('Webinar')">Webinar</button>
+                <button class="cert-tab" data-cat="Finance" onclick="filterCerts('Finance')">Finance</button>
+                <button class="cert-tab" data-cat="Work" onclick="filterCerts('Work')">Work</button>
+            </div>
+
+            <!-- Masonry Grid -->
+            <div class="cert-grid" id="cert-grid">
+
+                <!-- Community -->
+                <div class="cert-card" data-cat="Community" data-title="GDSC Lead Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Community/Rega Azizan - GDSC Lead.webp" alt="GDSC Lead Certificate" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Community</span>
+                            <span class="cert-card-label">GDSC Lead</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Competitions -->
+                <div class="cert-card" data-cat="Competitions" data-title="Technocorner SumoBot Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Competitions/Me holding Technocorner Sumobot Certificate.webp" alt="SumoBot Certificate" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Competitions</span>
+                            <span class="cert-card-label">Technocorner SumoBot</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Competitions" data-title="Himfest UI/UX 2020">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Competitions/Sertifikat Himfest UI_UX 2020 - Rega.webp" alt="Himfest UI/UX" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Competitions</span>
+                            <span class="cert-card-label">Himfest UI/UX 2020</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Competitions" data-title="IT-Venture Poster Competition">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Competitions/Sertifikat Lomba Poster IT-Venture - Rega.webp" alt="IT-Venture Poster" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Competitions</span>
+                            <span class="cert-card-label">IT-Venture Poster</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finance -->
+                <div class="cert-card" data-cat="Finance" data-title="Financial Literacy — Dicoding x DBS">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Finance/Financial Literacy by Dicoding Academy x DBS Foundation - Rega.webp" alt="Financial Literacy" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Finance</span>
+                            <span class="cert-card-label">Financial Literacy · DBS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- International -->
+                <div class="cert-card" data-cat="International" data-title="AYIMUN Bali — Cultural Performer">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/International Forum, Exchange & University/AYIMUN May 2022 Bali - Cultural Performer Certificate - Rega.webp" alt="AYIMUN Cultural" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">International</span>
+                            <span class="cert-card-label">AYIMUN · Cultural Performer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="International" data-title="AYIMUN Bali — General Speaker">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/International Forum, Exchange & University/AYIMUN May 2022 Bali - General Speaker Certificate - Rega.webp" alt="AYIMUN Speaker" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">International</span>
+                            <span class="cert-card-label">AYIMUN · General Speaker</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="International" data-title="BFF Scholarship Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/International Forum, Exchange & University/BFF Scholarship Certificates-Rega Azizan.webp" alt="BFF Scholarship" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">International</span>
+                            <span class="cert-card-label">BFF Scholarship</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="International" data-title="Dundalk Institute of Technology — Offer Letter">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/International Forum, Exchange & University/Dundalk Institute of Technology Conditional Letter of Offer.webp" alt="DkIT Offer" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">International</span>
+                            <span class="cert-card-label">DkIT · Conditional Offer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="International" data-title="IISMA 2024 — University of Sussex LoA">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/International Forum, Exchange & University/IISMA 2024 at the University of Sussex LoA - Rega.webp" alt="IISMA Sussex" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">International</span>
+                            <span class="cert-card-label">IISMA · University of Sussex</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="International" data-title="University of Edinburgh — Conditional Offer">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/International Forum, Exchange & University/University of Edinburgh Conditional Letter of Offer.webp" alt="Edinburgh Offer" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">International</span>
+                            <span class="cert-card-label">University of Edinburgh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="International" data-title="10th World Water Forum — Youth Delegate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/International Forum, Exchange & University/Youth and Student Delegate at the 10th World Water Forum - Rega.webp" alt="WWF Delegate" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">International</span>
+                            <span class="cert-card-label">10th World Water Forum</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language -->
+                <div class="cert-card" data-cat="Language" data-title="IELTS Certificate — Band 7.0">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Language/IELTS Certificate - Rega.webp" alt="IELTS" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Language</span>
+                            <span class="cert-card-label">IELTS · Band 7.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Language" data-title="Telkom University EPrT">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Language/Telkom University EPrT - Rega.webp" alt="EPrT" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Language</span>
+                            <span class="cert-card-label">Telkom University EPrT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Programming -->
+                <div class="cert-card" data-cat="Programming" data-title="AI for Productivity — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/AI for Productivity by Dicoding Academy - Rega.webp" alt="AI Productivity" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">AI for Productivity · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="AI Fundamental — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/AI Fundamental by Dicoding Academy - Rega.webp" alt="AI Fundamental" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">AI Fundamental · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="Android Developer Beginner — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/Android Developer Beginner Certificate by Dicoding Academy - Rega.webp" alt="Android Dev" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">Android Dev · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="Kotlin Project Completion">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/Certificate of Kotlin Project Completion.webp" alt="Kotlin" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">Kotlin Project</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="DevOps Certificate — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/DevOps Certificate by Dicoding Academy - Rega.webp" alt="DevOps" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">DevOps · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="iOS Developer Beginner — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/iOS Developer Beginner Certificate by Dicoding Academy - Rega.webp" alt="iOS Dev" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">iOS Dev · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="Programming with C — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/Programming with C Certificate by Dicoding Academy - Rega.webp" alt="C Programming" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">Programming with C · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="Prompt Engineering — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/Prompt Engineering by Dicoding Academy - Rega.webp" alt="Prompt Engineering" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">Prompt Engineering · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="Python Programming — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/Python Programming by Dicoding Academy - Rega.webp" alt="Python" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">Python · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="SQL Fundamental — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/SQL Fundamental Certificate - Rega.webp" alt="SQL" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">SQL Fundamental · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Programming" data-title="Web Programming Beginner — Dicoding">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Programming/Web Programming Beginner Certificate by Dicoding Academy - Rega.webp" alt="Web Programming" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Programming</span>
+                            <span class="cert-card-label">Web Programming · Dicoding</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scholarship -->
+                <div class="cert-card" data-cat="Scholarship" data-title="BFF Scholarship Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Scholarship/BFF Scholarship Certificates-Rega Azizan.webp" alt="BFF Scholarship" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Scholarship</span>
+                            <span class="cert-card-label">BFF Scholarship</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Scholarship" data-title="Desa Energi Berdikari — Pertamina Foundation">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Scholarship/Desa Energi Berdikari by Pertamina Foundation - Rega.webp" alt="DEB Pertamina" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Scholarship</span>
+                            <span class="cert-card-label">DEB · Pertamina Foundation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Scholarship" data-title="IISMA 2024 — University of Sussex LoA">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Scholarship/IISMA 2024 at the University of Sussex LoA - Rega.webp" alt="IISMA Sussex" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Scholarship</span>
+                            <span class="cert-card-label">IISMA · University of Sussex</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Scholarship" data-title="Sobat Bumi — Pertamina Foundation">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Scholarship/Sobat Bumi by Pertamina Foundation - Rega.webp" alt="Sobat Bumi" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Scholarship</span>
+                            <span class="cert-card-label">Sobat Bumi · Pertamina</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seminar -->
+                <div class="cert-card" data-cat="Seminar" data-title="Technowadays Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Seminar/Certicate Technowadays - Rega.webp" alt="Technowadays" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Seminar</span>
+                            <span class="cert-card-label">Technowadays</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Seminar" data-title="Official Interpreter — TechFest 2024">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Seminar/Official interpreter at TechFest 2024 by HMTK-UBT x GDSC-UBT - Rega.webp" alt="TechFest Interpreter" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Seminar</span>
+                            <span class="cert-card-label">TechFest 2024 · Interpreter</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Webinar -->
+                <div class="cert-card" data-cat="Webinar" data-title="Baparekraf Developer Day 2020">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/Baparekraf Developer Day 2020 Certificate.webp" alt="BDD 2020" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">Baparekraf Dev Day 2020</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Webinar" data-title="Baparekraf Developer Day 2021">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/Baparekraf Developer Day 2021 Certificate.webp" alt="BDD 2021" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">Baparekraf Dev Day 2021</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Webinar" data-title="Build Beautiful Apps Using SwiftUI">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/Build Your Beautiful Apps Using SwiftUI Certificate - Rega.webp" alt="SwiftUI" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">Beautiful Apps · SwiftUI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Webinar" data-title="Cara Menjadi Android Developer Expert">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/Cara Menjadi Android Developer Expert Certificate - Rega.webp" alt="Android Expert" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">Android Developer Expert</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Webinar" data-title="FREE Webinar by Schoters">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/E-Certificate-FREE-Webinar-by-Schoters.webp" alt="Schoters Webinar" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">Schoters Webinar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Webinar" data-title="Jetpack Compose — UI Masa Depan">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/Jetpack Compose untuk UI Masa Depan Certificate.webp" alt="Jetpack Compose" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">Jetpack Compose</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Webinar" data-title="Lean-Agile Mindset Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/Lean-Agile Mindset Certificate - Rega.webp" alt="Lean Agile" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">Lean-Agile Mindset</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cert-card" data-cat="Webinar" data-title="NFT Webinar Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Webinar/SERTIFIKAT WEBINAR NFT IBS-231.webp" alt="NFT Webinar" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Webinar</span>
+                            <span class="cert-card-label">NFT Webinar · IBS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Work -->
+                <div class="cert-card" data-cat="Work" data-title="Ruangguru STAR Certificate">
+                    <div class="cert-card-inner">
+                        <img src="assets/certificates/Work/Ruangguru STAR.webp" alt="Ruangguru STAR" loading="lazy">
+                        <div class="cert-card-overlay">
+                            <span class="cert-card-cat">Work</span>
+                            <span class="cert-card-label">Ruangguru STAR</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- /cert-grid -->
+        </div><!-- /cert-section-inner -->
+    </section>
+
+    <!-- Lightbox -->
+    <div class="cert-lightbox" id="cert-lightbox" onclick="closeCertLightbox(event)">
+        <button class="cert-lightbox-close" onclick="closeCertLightbox()" aria-label="Close">&times;</button>
+        <div class="cert-lightbox-body">
+            <img src="" alt="" id="cert-lightbox-img">
+            <p class="cert-lightbox-title" id="cert-lightbox-title"></p>
+        </div>
+    </div>
+
+    <!-- ═══ re-open the outer sections that we closed above ═══ -->
+    <div style="display:none;"><!-- dummy to satisfy parser --></div>
 
         </section>
     </div>
@@ -2002,7 +2682,7 @@
             },
             {
                 url: "https://beritaborneo.com/main/gotong-royong-di-pantai-amal-masalah-sampah-tak-bisa-ditunda/",
-                customImage: "assets/img/BeritaBorneo-PantaiAmal.jpg"
+                customImage: "assets/img/BeritaBorneo-PantaiAmal.webp"
             },
             {
                 url: "https://headlinews.id/tarakan/aksi-bersih-pantai-amal-libatkan-babinsa-dan-masyarakat/",
@@ -2018,11 +2698,11 @@
             },
             {
                 url: "https://www.researchgate.net/profile/Arif-Fadllullah/publication/389396639_PENINGKATAN_KETERAMPILAN_BRANDING_UMKM_TARAKAN_MELALUI_PEMANFAATAN_TEKNOLOGI_DIGITAL_DI_ERA_40/links/67c0c880207c0c20fa9aad15/PENINGKATAN-KETERAMPILAN-BRANDING-UMKM-TARAKAN-MELALUI-PEMANFAATAN-TEKNOLOGI-DIGITAL-DI-ERA-40.pdf",
-                customImage: "assets/img/UMKM-4_0.JPG"
+                customImage: "assets/img/UMKM-4_0.webp"
             },
             {
                 url: "https://www.instagram.com/p/C4xJrTCLwQd/?img_index=2",
-                customImage: "assets/img/IISMA-BEM.jpeg"
+                customImage: "assets/img/IISMA-BEM.webp"
             },
             {
                 url: "https://ce.ubt.ac.id/2024/04/01/membanggakan-satu-mahasiswa-teknik-komputer-lolos-pertukaran-mahasiswa-internasional/",
@@ -2030,7 +2710,7 @@
             },
             {
                 url: "https://www.instagram.com/p/DI5pAUXpuRC/",
-                customImage: "assets/img/DEB-UBT.jpeg"
+                customImage: "assets/img/DEB-UBT.webp"
             },
             {
                 url: "https://ce.ubt.ac.id/2024/05/27/google-developer-expert-asal-korsel-hadir-menjadi-keynote-speaker-di-acara-ormawa-tekom-ubt/",
@@ -2452,6 +3132,100 @@
 
             // Inisialisasi saat web pertama dibuka (sembunyikan project ke-4 dan seterusnya)
             handleProjectToggle();
+
+            // ── Certificates: Parallax Tilt + Click Lightbox ────────────
+            initCertCards();
+        });
+
+        /* ─────────────────────────────────────────────────────────────
+         *  CERTIFICATE SECTION: Tilt, Filter, Lightbox
+         * ───────────────────────────────────────────────────────────── */
+
+        function initCertCards() {
+            const cards = document.querySelectorAll('.cert-card');
+            cards.forEach(card => {
+                const inner = card.querySelector('.cert-card-inner');
+                const img   = card.querySelector('img');
+
+                // ── 3D Parallax Tilt ──
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const cx   = rect.left + rect.width  / 2;
+                    const cy   = rect.top  + rect.height / 2;
+                    const dx   = (e.clientX - cx) / (rect.width  / 2);   // -1 to 1
+                    const dy   = (e.clientY - cy) / (rect.height / 2);   // -1 to 1
+                    const tiltX = dy * -10;   // rotate around X axis
+                    const tiltY = dx *  10;   // rotate around Y axis
+                    inner.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.03)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    inner.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)';
+                });
+
+                // ── Click → Lightbox ──
+                card.addEventListener('click', () => {
+                    const src   = img ? img.src   : '';
+                    const title = card.dataset.title || '';
+                    openCertLightbox(src, title);
+                });
+            });
+        }
+
+        /* Filter certificates by category */
+        function filterCerts(cat) {
+            // Update tab active state
+            document.querySelectorAll('.cert-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.cat === cat);
+            });
+
+            // Show/hide cards
+            const cards = document.querySelectorAll('.cert-card');
+            cards.forEach(card => {
+                const match = cat === 'all' || card.dataset.cat === cat;
+                if (match) {
+                    card.classList.remove('cert-hidden');
+                    // Fade in
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(12px)';
+                    requestAnimationFrame(() => {
+                        card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    });
+                } else {
+                    card.classList.add('cert-hidden');
+                    card.style.opacity = '';
+                    card.style.transform = '';
+                    card.style.transition = '';
+                }
+            });
+        }
+
+        /* Open lightbox */
+        function openCertLightbox(src, title) {
+            const lb    = document.getElementById('cert-lightbox');
+            const lbImg = document.getElementById('cert-lightbox-img');
+            const lbTit = document.getElementById('cert-lightbox-title');
+            lbImg.src  = src;
+            lbImg.alt  = title;
+            lbTit.textContent = title;
+            lb.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        /* Close lightbox */
+        function closeCertLightbox(e) {
+            // If clicking the body (not the image itself), close
+            if (e && e.target === document.getElementById('cert-lightbox-img')) return;
+            const lb = document.getElementById('cert-lightbox');
+            lb.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // ESC key to close lightbox
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCertLightbox();
         });
     </script>
 </body>
