@@ -461,15 +461,48 @@
             color: var(--accent);
         }
 
+        /* ── Section-level reveal (lama, dipertahankan) ── */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s ease-out;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* ── Per-item reveal ── */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-item.from-left  { transform: translateX(-36px); }
+        .reveal-item.from-right { transform: translateX(36px); }
+        .reveal-item.from-scale { transform: scale(0.88); }
+        .reveal-item.from-fade  { transform: none; }
+
+        .reveal-item.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Stagger delays */
+        .reveal-item[data-delay="1"] { transition-delay: 0.08s; }
+        .reveal-item[data-delay="2"] { transition-delay: 0.16s; }
+        .reveal-item[data-delay="3"] { transition-delay: 0.24s; }
+        .reveal-item[data-delay="4"] { transition-delay: 0.32s; }
+        .reveal-item[data-delay="5"] { transition-delay: 0.40s; }
+        .reveal-item[data-delay="6"] { transition-delay: 0.48s; }
+        .reveal-item[data-delay="7"] { transition-delay: 0.56s; }
+        .reveal-item[data-delay="8"] { transition-delay: 0.64s; }
+
+        /* Saat elemen keluar dari ATAS viewport — siap masuk dari atas */
+        .reveal-item.exited-top:not(.from-left):not(.from-right):not(.from-scale):not(.from-fade) {
+            transform: translateY(-32px);
         }
 
         .gallery-section {
@@ -514,7 +547,7 @@
 
         @media (max-width: 480px) {
             .masonry-grid {
-                column-count: 1;
+                column-count: 2;
             }
         }
 
@@ -1174,6 +1207,18 @@
         @media (max-width: 1200px) { .cert-grid { column-count: 3; } }
         @media (max-width: 820px)  { .cert-grid { column-count: 2; } }
         @media (max-width: 480px)  { .cert-grid { column-count: 1; } }
+        @media (max-width: 480px)  { .cert-grid.cert-grid-2col { column-count: 2; } }
+
+        /* Mobile: tidak ada hover — tampilkan gambar normal tanpa filter gelap */
+        @media (hover: none), (max-width: 820px) {
+            .cert-card-inner img {
+                filter: none;
+            }
+            .cert-card-overlay {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* ── Individual Card ────────────────────────────────────── */
         .cert-card {
@@ -2106,15 +2151,22 @@
 
     <div class="container2">
         <section id="skills" class="reveal" style="margin-top: 50px;">
-            <h2 class="section-title">Skills & Tools</h2>
+            <h2 class="section-title" style="display:block; text-align:center; width:100%;">Skills &amp; Tools</h2>
             <div class="skills-container">
                 <div class="skill-pill">Mobile Dev (Flutter, Kotlin, Swift)</div>
                 <div class="skill-pill">Web Dev (Vue.js, Laravel, Bootstrap)</div>
-                <div class="skill-pill">C/C++ & Python</div>
-                <div class="skill-pill">Firebase & SQL</div>
-                <div class="skill-pill">Figma & UI/UX Design</div>
-                <div class="skill-pill">Git & Version Control</div>
-                <div class="skill-pill">IoT & Electronics</div>
+                <div class="skill-pill">C/C++ &amp; Python</div>
+                <div class="skill-pill">Firebase &amp; SQL</div>
+                <div class="skill-pill">Figma &amp; UI/UX Design</div>
+                <div class="skill-pill">Git &amp; Version Control</div>
+                <div class="skill-pill">IoT &amp; Electronics</div>
+                <div class="skill-pill">Software Design</div>
+                <div class="skill-pill">Project Management</div>
+                <div class="skill-pill">Database Administration</div>
+                <div class="skill-pill">Database Engineering</div>
+                <div class="skill-pill">Data Analyst</div>
+                <div class="skill-pill">Network Planning and Infrastructure</div>
+                <div class="skill-pill">Microsoft Office</div>
             </div>
 
 
@@ -2659,6 +2711,7 @@
     </footer>
 
     <script>
+        /* ── Section reveal (scroll-based, dipertahankan untuk kompatibilitas) ── */
         function reveal() {
             var reveals = document.querySelectorAll(".reveal");
             for (var i = 0; i < reveals.length; i++) {
@@ -2674,6 +2727,86 @@
         }
         window.addEventListener("scroll", reveal);
         reveal();
+
+        /* ── Bidirectional per-item IntersectionObserver reveal ── */
+        let certIO = null; // expose untuk filterCerts
+
+        /* Helper: tentukan arah exit berdasarkan posisi relatif viewport */
+        function applyExitDirection(el, boundingRect, rootBounds) {
+            // Jika bottom elemen sudah di atas viewport → keluar dari atas
+            if (boundingRect.bottom < (rootBounds ? rootBounds.top : 0)) {
+                el.classList.add('exited-top');
+            } else {
+                // Keluar dari bawah → reset ke state awal (dari bawah)
+                el.classList.remove('exited-top');
+            }
+        }
+
+        (function () {
+            /* IO umum untuk semua elemen kecuali cert-card */
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const el  = entry.target;
+                    if (entry.isIntersecting) {
+                        el.classList.remove('exited-top');
+                        el.classList.add('visible');
+                    } else {
+                        el.classList.remove('visible');
+                        applyExitDirection(el, entry.boundingClientRect, entry.rootBounds);
+                    }
+                });
+            }, { threshold: 0.08 });
+
+            /* Helper: tambahkan kelas reveal-item + variant + stagger */
+            function stagger(selector, variant, max) {
+                const els = document.querySelectorAll(selector);
+                els.forEach((el, i) => {
+                    el.classList.add('reveal-item');
+                    if (variant) el.classList.add(variant);
+                    el.dataset.delay = (i % (max || 8)) + 1;
+                    io.observe(el);
+                });
+            }
+
+            /* Timeline items — slide dari kiri */
+            stagger('.timeline-item', 'from-left', 5);
+
+            /* Project cards — scale up */
+            stagger('.project-card', 'from-scale', 6);
+
+            /* Skill pills — fade + stagger */
+            stagger('.skill-pill', 'from-fade', 8);
+
+            /* Filter tabs sertifikat — fade */
+            stagger('.cert-tab', 'from-fade', 8);
+
+            /* Masonry gallery items — slide up */
+            stagger('.masonry-item', null, 8);
+
+            /* Footer link groups — dari kanan */
+            stagger('.link-group a', 'from-right', 6);
+
+        })();
+
+        /* certIO terpisah agar filterCerts bisa re-observe */
+        certIO = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const el = entry.target;
+                if (entry.isIntersecting) {
+                    el.classList.remove('exited-top');
+                    el.classList.add('visible');
+                } else {
+                    el.classList.remove('visible');
+                    applyExitDirection(el, entry.boundingClientRect, entry.rootBounds);
+                }
+            });
+        }, { threshold: 0.05 });
+
+        document.querySelectorAll('.cert-card').forEach((card, i) => {
+            card.classList.add('reveal-item');
+            card.dataset.delay = (i % 8) + 1;
+            certIO.observe(card);
+        });
 
         const publications = [
             {
@@ -3135,6 +3268,8 @@
 
             // ── Certificates: Parallax Tilt + Click Lightbox ────────────
             initCertCards();
+            // Inisialisasi mobile col saja — IO yang handle reveal awal
+            updateCertMobileCols();
         });
 
         /* ─────────────────────────────────────────────────────────────
@@ -3146,6 +3281,7 @@
             cards.forEach(card => {
                 const inner = card.querySelector('.cert-card-inner');
                 const img   = card.querySelector('img');
+                // reveal-item sudah ditambahkan oleh IIFE IntersectionObserver
 
                 // ── 3D Parallax Tilt ──
                 card.addEventListener('mousemove', (e) => {
@@ -3172,6 +3308,14 @@
             });
         }
 
+        /* ── Hitung & set mobile cols tanpa trigger animasi ── */
+        function updateCertMobileCols() {
+            const certGrid = document.getElementById('cert-grid');
+            if (!certGrid) return;
+            const visible = certGrid.querySelectorAll('.cert-card:not(.cert-hidden)').length;
+            certGrid.classList.toggle('cert-grid-2col', visible > 3);
+        }
+
         /* Filter certificates by category */
         function filterCerts(cat) {
             // Update tab active state
@@ -3179,27 +3323,44 @@
                 tab.classList.toggle('active', tab.dataset.cat === cat);
             });
 
-            // Show/hide cards
+            // Show / hide cards
             const cards = document.querySelectorAll('.cert-card');
+            let visibleIdx = 0;
             cards.forEach(card => {
                 const match = cat === 'all' || card.dataset.cat === cat;
                 if (match) {
                     card.classList.remove('cert-hidden');
-                    // Fade in
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(12px)';
+
+                    // Reset ke state tersembunyi dulu
+                    card.classList.remove('visible');
+                    card.style.transitionDelay = '0s';
+
+                    // Capture nilai untuk closure yang benar
+                    const capturedCard  = card;
+                    const capturedDelay = (visibleIdx % 8) * 0.09;
+                    visibleIdx++;
+
+                    // Double rAF memastikan browser merender state tersembunyi dulu
                     requestAnimationFrame(() => {
-                        card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
+                        requestAnimationFrame(() => {
+                            capturedCard.style.transitionDelay = capturedDelay + 's';
+                            capturedCard.classList.add('visible');
+                        });
                     });
+
+                    // Re-observe supaya scroll-reveal bisa bekerja lagi jika card di luar viewport
+                    if (certIO) certIO.observe(capturedCard);
+
                 } else {
                     card.classList.add('cert-hidden');
-                    card.style.opacity = '';
-                    card.style.transform = '';
-                    card.style.transition = '';
+                    card.classList.remove('visible');
+                    card.style.transitionDelay = '0s';
+                    if (certIO) certIO.unobserve(card);
                 }
             });
+
+            // Update mobile cols
+            updateCertMobileCols();
         }
 
         /* Open lightbox */
