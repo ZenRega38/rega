@@ -1007,9 +1007,157 @@
             }
         }
 
+        /* ── Hamburger Button ── */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            z-index: 10002;
+            background: none;
+            border: none;
+            padding: 0;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: center;
+        }
+
+        .hamburger.is-active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .hamburger.is-active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .hamburger.is-active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        /* ── Full-screen Mobile Menu Overlay ── */
+        .mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(9, 9, 11, 0.95);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                        visibility 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .mobile-menu-overlay.is-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .mobile-menu-links li {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .mobile-menu-overlay.is-open .mobile-menu-links li {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu-overlay.is-open .mobile-menu-links li:nth-child(1) { transition-delay: 0.08s; }
+        .mobile-menu-overlay.is-open .mobile-menu-links li:nth-child(2) { transition-delay: 0.14s; }
+        .mobile-menu-overlay.is-open .mobile-menu-links li:nth-child(3) { transition-delay: 0.20s; }
+        .mobile-menu-overlay.is-open .mobile-menu-links li:nth-child(4) { transition-delay: 0.26s; }
+        .mobile-menu-overlay.is-open .mobile-menu-links li:nth-child(5) { transition-delay: 0.32s; }
+        .mobile-menu-overlay.is-open .mobile-menu-links li:nth-child(6) { transition-delay: 0.38s; }
+
+        .mobile-menu-links a {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 16px 40px;
+            display: block;
+            letter-spacing: -0.5px;
+            transition: color 0.3s ease, transform 0.3s ease, letter-spacing 0.3s ease;
+            position: relative;
+        }
+
+        .mobile-menu-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 40px;
+            height: 2px;
+            background: var(--text-main);
+            border-radius: 2px;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .mobile-menu-links a:hover,
+        .mobile-menu-links a:focus {
+            color: var(--text-main);
+            transform: scale(1.05);
+            letter-spacing: 1px;
+        }
+
+        .mobile-menu-links a:hover::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        .mobile-menu-footer {
+            position: absolute;
+            bottom: 40px;
+            text-align: center;
+        }
+
+        .mobile-menu-footer span {
+            font-size: 0.75rem;
+            color: #52525b;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Body scroll lock */
+        body.menu-open {
+            overflow: hidden;
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
+            }
+
+            .hamburger {
+                display: flex;
             }
 
             .timeline-item {
@@ -1395,7 +1543,27 @@
             <a href="#certifications">Certificates</a>
             <a href="#contact">Contact</a>
         </div>
+        <button class="hamburger" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </nav>
+
+    <!-- Full-screen Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <ul class="mobile-menu-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#resume">Experience</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#certifications">Certificates</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="mobile-menu-footer">
+            <span>Rega R. Azizan</span>
+        </div>
+    </div>
 
     <div class="container">
         <div class="container2">
@@ -3388,6 +3556,52 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeCertLightbox();
         });
+    </script>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        (function() {
+            const hamburger = document.getElementById('hamburger-btn');
+            const overlay   = document.getElementById('mobile-menu-overlay');
+            const menuLinks = overlay.querySelectorAll('.mobile-menu-links a');
+
+            function toggleMenu() {
+                const isOpen = overlay.classList.contains('is-open');
+
+                if (isOpen) {
+                    // Close menu
+                    overlay.classList.remove('is-open');
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    document.body.classList.remove('menu-open');
+                } else {
+                    // Open menu
+                    overlay.classList.add('is-open');
+                    hamburger.classList.add('is-active');
+                    hamburger.setAttribute('aria-expanded', 'true');
+                    document.body.classList.add('menu-open');
+                }
+            }
+
+            hamburger.addEventListener('click', toggleMenu);
+
+            // Close menu when a link is clicked
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    overlay.classList.remove('is-open');
+                    hamburger.classList.remove('is-active');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                    document.body.classList.remove('menu-open');
+                });
+            });
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+                    toggleMenu();
+                }
+            });
+        })();
     </script>
 </body>
 
