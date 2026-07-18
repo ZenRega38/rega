@@ -2531,26 +2531,73 @@
         <a href="#" class="cert-link" id="project-toggle-btn">See more &rarr;</a>
     </div>
 
-    <div class="container2">
+    <div class="container2" style="max-width: 1600px;">
         <section id="skills" class="reveal" style="margin-top: 50px;">
-            <h2 class="section-title" style="display:block; text-align:center; width:100%;">Skills &amp; Tools</h2>
-            <div class="skills-container">
-                <div class="skill-pill">Mobile Dev (Flutter, Kotlin, Swift)</div>
-                <div class="skill-pill">Web Dev (Vue.js, Laravel, Bootstrap)</div>
-                <div class="skill-pill">C/C++ &amp; Python</div>
-                <div class="skill-pill">Firebase &amp; SQL</div>
-                <div class="skill-pill">Figma &amp; UI/UX Design</div>
-                <div class="skill-pill">Git &amp; Version Control</div>
-                <div class="skill-pill">IoT &amp; Electronics</div>
-                <div class="skill-pill">Software Design</div>
-                <div class="skill-pill">Project Management</div>
+            <div style="text-align:center; margin-bottom: 40px;">
+                <h2 class="section-title">Skills &amp; Tools</h2>
+            </div>
+            <div class="skills-container" id="skills-container">
+                <div class="skill-pill">Python</div>
+                <div class="skill-pill">C/C++</div>
+                <div class="skill-pill">SQL</div>
+                <div class="skill-pill">Kotlin</div>
+                <div class="skill-pill">Swift</div>
+                <div class="skill-pill">Dart (Flutter)</div>
+                <div class="skill-pill">JavaScript</div>
+                <div class="skill-pill">PHP</div>
+                <div class="skill-pill">HTML &amp; CSS</div>
+                <div class="skill-pill">Android App Development</div>
+                <div class="skill-pill">iOS App Development</div>
+                <div class="skill-pill">Flutter (Cross-platform Development)</div>
+                <div class="skill-pill">SwiftUI</div>
+                <div class="skill-pill">Firebase Integration</div>
+                <div class="skill-pill">Web Programming</div>
+                <div class="skill-pill">Laravel</div>
+                <div class="skill-pill">Vue.js</div>
+                <div class="skill-pill">Next.js</div>
+                <div class="skill-pill">Bootstrap</div>
+                <div class="skill-pill">WordPress</div>
+                <div class="skill-pill">API Integration</div>
+                <div class="skill-pill">MySQL</div>
+                <div class="skill-pill">SQLite</div>
+                <div class="skill-pill">SQL Workbench</div>
                 <div class="skill-pill">Database Administration</div>
                 <div class="skill-pill">Database Engineering</div>
-                <div class="skill-pill">Data Analyst</div>
+                <div class="skill-pill">Firebase (Auth, Firestore, Realtime Database)</div>
+                <div class="skill-pill">Machine Learning</div>
+                <div class="skill-pill">Deep Learning</div>
+                <div class="skill-pill">PyTorch</div>
+                <div class="skill-pill">TensorFlow</div>
+                <div class="skill-pill">Data Analysis</div>
+                <div class="skill-pill">Prompt Engineering</div>
+                <div class="skill-pill">UI/UX Design</div>
+                <div class="skill-pill">Figma (Prototyping)</div>
+                <div class="skill-pill">Internet of Things (IoT)</div>
+                <div class="skill-pill">Sensor &amp; Aktuator</div>
+                <div class="skill-pill">Mikrokontroler</div>
+                <div class="skill-pill">Git &amp; GitHub/GitLab (Version Control)</div>
+                <div class="skill-pill">DevOps</div>
                 <div class="skill-pill">Network Planning and Infrastructure</div>
                 <div class="skill-pill">Microsoft Office</div>
+                <div class="skill-pill">Google Workspace</div>
+                <div class="skill-pill">Project Management</div>
+                <div class="skill-pill">Team Leadership</div>
+                <div class="skill-pill">Community Management</div>
+                <div class="skill-pill">Event Organizing</div>
+                <div class="skill-pill">Bahasa Inggris (IELTS Band 7.0 / C1)</div>
+                <div class="skill-pill">Public Speaking</div>
+                <div class="skill-pill">Interpreting/Translation (Penerjemah)</div>
+                <div class="skill-pill">Cross-cultural Communication</div>
+                <div class="skill-pill">Teaching/Mentoring</div>
+                <div class="skill-pill">Customer Service</div>
+                <div class="skill-pill">Sales &amp; Marketing (Field Marketing)</div>
+                <div class="skill-pill">Problem Solving</div>
+                <div class="skill-pill">Adaptability</div>
             </div>
 
+            <div class="project-toggle-wrapper" id="skills-toggle-wrapper" style="display: none; margin-top: 30px;">
+                <a href="#" class="cert-link" id="skills-toggle-btn">See more &rarr;</a>
+            </div>
 
             <div class="cert-link-wrapper" style="display:none;">
                 <a href="https://drive.google.com/drive/folders/15sbSvJcpDUPHc9fgPz7MEAyW2BlBKVEj" class="cert-link">See
@@ -2567,7 +2614,7 @@
     <section id="certifications" class="cert-section reveal">
         <div class="cert-section-inner">
             <div style="text-align:center; margin-bottom: 40px;">
-                <h2 class="section-title">Certifications</h2>
+                <h2 class="section-title" style="margin-bottom: 10px;">Certifications</h2>
                 <p style="color:var(--text-muted); font-size:0.95rem; margin-top: 8px;">Click any certificate to view full size</p>
             </div>
 
@@ -3575,7 +3622,10 @@
             }
 
             handleGalleryMobile();
-            window.addEventListener('resize', () => handleGalleryMobile());
+            window.addEventListener('resize', () => {
+                handleGalleryMobile();
+                if (typeof handleSkillsToggle === 'function') handleSkillsToggle();
+            });
         });
 
         // --- Logika Batas 3 Project ---
@@ -3626,6 +3676,63 @@
             }
         }
 
+        // --- Logika Batas Skills di Mobile ---
+        let isSkillsExpanded = false;
+
+        function handleSkillsToggle(e) {
+            const skills = document.querySelectorAll('#skills-container .skill-pill');
+            const toggleWrapper = document.getElementById('skills-toggle-wrapper');
+            const toggleBtn = document.getElementById('skills-toggle-btn');
+            
+            if (!toggleWrapper || !toggleBtn || skills.length === 0) return;
+
+            if (window.innerWidth <= 768) {
+                toggleWrapper.style.display = 'flex';
+                toggleWrapper.style.justifyContent = 'center';
+                if (isSkillsExpanded) {
+                    skills.forEach(skill => {
+                        if (skill.classList.contains('hidden-skill')) {
+                            skill.classList.remove('hidden-skill');
+                            skill.style.display = 'inline-block';
+                            skill.style.animation = 'none';
+                            void skill.offsetWidth;
+                            skill.style.animation = 'slideUpFade 0.6s ease forwards';
+                        }
+                    });
+                    toggleBtn.innerHTML = '&larr; See less';
+                } else {
+                    skills.forEach((skill, index) => {
+                        if (index >= 12) {
+                            skill.classList.add('hidden-skill');
+                            skill.style.display = 'none';
+                            skill.style.animation = 'none';
+                        } else {
+                            skill.classList.remove('hidden-skill');
+                            skill.style.display = 'inline-block';
+                        }
+                    });
+                    toggleBtn.innerHTML = 'See more &rarr;';
+                    
+                    if (e && e.type === 'click') {
+                        setTimeout(() => {
+                            const skillsSection = document.getElementById('skills');
+                            if (skillsSection) {
+                                const y = skillsSection.getBoundingClientRect().top + window.scrollY - 80;
+                                window.scrollTo({ top: y, behavior: 'smooth' });
+                            }
+                        }, 50);
+                    }
+                }
+            } else {
+                toggleWrapper.style.display = 'none';
+                skills.forEach(skill => {
+                    skill.classList.remove('hidden-skill');
+                    skill.style.display = 'inline-block';
+                    skill.style.animation = 'none';
+                });
+            }
+        }
+
         // Pasang event listener saat website selesai dimuat
         document.addEventListener('DOMContentLoaded', () => {
             const projectBtn = document.getElementById('project-toggle-btn');
@@ -3639,6 +3746,16 @@
 
             // Inisialisasi saat web pertama dibuka (sembunyikan project ke-4 dan seterusnya)
             handleProjectToggle();
+
+            const skillsBtn = document.getElementById('skills-toggle-btn');
+            if (skillsBtn) {
+                skillsBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    isSkillsExpanded = !isSkillsExpanded;
+                    handleSkillsToggle(e);
+                });
+            }
+            handleSkillsToggle();
 
             // ── Certificates: Parallax Tilt + Click Lightbox ────────────
             initCertCards();
