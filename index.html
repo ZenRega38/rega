@@ -1520,12 +1520,140 @@
             box-shadow: 0 30px 80px rgba(0,0,0,0.8);
         }
 
-        .cert-lightbox-title {
-            color: rgba(255,255,255,0.75);
-            font-size: 0.9rem;
-            font-weight: 500;
+        /* ═══════════════════════════════════════════════════════════ */
+        /*  LOGO CONVEYOR BELT (CAL.COM STYLE - VECTOR SVGS)           */
+        /* ═══════════════════════════════════════════════════════════ */
+        .logo-conveyor-section {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            background: rgba(255, 255, 255, 0.015);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 26px 0;
+            margin-top: 60px;
+            margin-bottom: 70px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .conveyor-container {
+            max-width: 1700px;
+            margin: 0 auto;
+            padding: 0 4%;
+            display: flex;
+            align-items: center;
+            gap: 45px;
+        }
+
+        .conveyor-label {
+            flex-shrink: 0;
+            width: 220px;
+        }
+
+        .conveyor-label h4 {
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .conveyor-label span {
+            display: block;
+            font-size: 0.72rem;
+            color: #71717a;
+            margin-top: 3px;
+            font-weight: 400;
             letter-spacing: 0.5px;
-            text-align: center;
+            text-transform: none;
+        }
+
+        .marquee-wrapper {
+            flex-grow: 1;
+            overflow: hidden;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+        }
+
+        .marquee-track {
+            display: flex;
+            align-items: center;
+            gap: 45px;
+            width: max-content;
+            animation: marqueeScroll 55s linear infinite;
+        }
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marqueeScroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .logo-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 34px;
+            color: #a1a1aa;
+            opacity: 0.65;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .logo-item img,
+        .logo-item svg {
+            height: 30px;
+            width: auto;
+            max-width: 160px;
+            object-fit: contain;
+            mix-blend-mode: screen;
+            filter: grayscale(100%) invert(1) opacity(0.8) contrast(1.2);
+            transition: all 0.3s ease;
+        }
+        
+        .logo-item img.no-invert {
+            mix-blend-mode: normal;
+            filter: grayscale(100%) opacity(0.8) contrast(1.2);
+        }
+
+        .logo-item:hover img,
+        .logo-item:hover svg {
+            filter: grayscale(0%) invert(1) opacity(1) contrast(1.1);
+            transform: scale(1.1);
+        }
+        
+        .logo-item:hover img.no-invert {
+            filter: grayscale(0%) opacity(1) contrast(1);
+        }
+
+        @media (max-width: 900px) {
+            .conveyor-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .conveyor-label {
+                width: 100%;
+            }
+
+            .marquee-wrapper {
+                width: 100%;
+            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -1753,6 +1881,93 @@
                 </div>
             </section>
         </div>
+
+        <!-- Logo Conveyor Belt Section (Affiliations & Contributions) -->
+        <section class="logo-conveyor-section reveal">
+            <div class="conveyor-container">
+                <div class="conveyor-label">
+                    <h4>Pernah Berkontribusi & Terafiliasi</h4>
+                    <span>Affiliated & Collaborated With</span>
+                </div>
+                <div class="marquee-wrapper">
+                    <div class="marquee-track">
+                        <!-- Set 1 -->
+                        <div class="logo-item" title="Language Center (Pare)"><img src="https://logo.clearbit.com/kampunginggris.id" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=kampunginggris.id&sz=128';" alt="Language Center Pare"></div>
+                        <div class="logo-item" title="SMK IDN Boarding School"><img src="https://logo.clearbit.com/idn.sch.id" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=idn.sch.id&sz=128';" alt="SMK IDN Boarding School"></div>
+                        <div class="logo-item" title="Google Developer Group"><img src="https://logo.clearbit.com/gdg.community.dev" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=gdg.community.dev&sz=128';" alt="Google Developer Group"></div>
+                        <div class="logo-item" title="Dicoding"><img src="assets/img/logos_real/dicoding.png" alt="Dicoding"></div>
+                        <div class="logo-item" title="Perbanas Institute"><img src="assets/img/logos_real/perbanas_institute.png" alt="Perbanas Institute"></div>
+                        <div class="logo-item" title="DOT Indonesia"><img src="assets/img/logos_real/dot_indonesia.png" alt="DOT Indonesia"></div>
+                        <div class="logo-item" title="PT. PAMA"><img src="https://logo.clearbit.com/pamapersada.com" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=pamapersada.com&sz=128';" alt="PT Pamapersada Nusantara"></div>
+                        <div class="logo-item" title="SMK Darul Muslim (Bogor)"><img src="assets/img/logos_real/smk_darul_muslim.png" alt="SMK Darul Muslim"></div>
+                        <div class="logo-item" title="AYIMUN Global Network"><img src="https://logo.clearbit.com/ayimun.org" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=ayimun.org&sz=128';" alt="AYIMUN"></div>
+                        <div class="logo-item" title="UNESCO"><img src="assets/img/logos_real/unesco.png" alt="UNESCO"></div>
+                        <div class="logo-item" title="Dundalk Institute of Technology"><img src="assets/img/logos_real/dundalk_institute_of_technology.png" alt="DkIT"></div>
+                        <div class="logo-item" title="Universitas Borneo Tarakan"><img src="assets/img/logos_real/universitas_borneo_tarakan.png" alt="Universitas Borneo Tarakan (UBT)"></div>
+                        <div class="logo-item" title="CE-UBT"><img src="assets/img/logos_real/ce_ubt.png" alt="CE-UBT"></div>
+                        <div class="logo-item" title="HMTK UBT"><img src="assets/img/logos_real/hmtk_ft_ubt.png" alt="HMTK UBT"></div>
+                        <div class="logo-item" title="Meaningful Design"><img src="assets/img/logos_real/meaningful_design_group.png" alt="Meaningful Design"></div>
+                        <div class="logo-item" title="Fab Foundation"><img class="no-invert" src="https://logo.clearbit.com/fabfoundation.org" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=fabfoundation.org&sz=128';" alt="Fab Foundation"></div>
+                        <div class="logo-item" title="MIT"><img src="assets/img/logos_real/mit.png" alt="MIT"></div>
+                        <div class="logo-item" title="Pertamina Foundation"><img src="assets/img/logos_real/pertamina_foundation.png" alt="Pertamina Foundation"></div>
+                        <div class="logo-item" title="IISMA"><img src="assets/img/logos_real/iisma.png" alt="IISMA"></div>
+                        <div class="logo-item" title="Kemendikbudristek"><img src="assets/img/logos_real/kemendikbud.png" alt="Kemendikbudristek"></div>
+                        <div class="logo-item" title="University of Sussex"><img src="assets/img/logos_real/university_of_sussex.png" alt="University of Sussex"></div>
+                        <div class="logo-item" title="GDSC"><img src="https://logo.clearbit.com/gdsc.community.dev" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=gdsc.community.dev&sz=128';" alt="GDSC"></div>
+                        <div class="logo-item" title="Google Developer Expert"><img src="assets/img/logos_real/gde_by_google.png" alt="Google Developer Expert"></div>
+                        <div class="logo-item" title="BWS (PUPR)"><img src="assets/img/logos_real/bws_pupr.png" alt="BWS PUPR"></div>
+                        <div class="logo-item" title="World Water Council"><img class="no-invert" src="assets/img/logos_real/world_water_council.png" alt="World Water Council"></div>
+                        <div class="logo-item" title="BAC by Ruangguru"><img src="assets/img/logos_real/bac_by_ruangguru.png" alt="Brain Academy Ruangguru"></div>
+                        <div class="logo-item" title="BMKG"><img src="assets/img/logos_real/bkmg_tarakan.png" alt="BMKG"></div>
+                        <div class="logo-item" title="Pemprov Kaltara"><img src="https://logo.clearbit.com/kaltaraprov.go.id" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=kaltaraprov.go.id&sz=128';" alt="Pemprov Kaltara"></div>
+                        <div class="logo-item" title="KPH Tarakan"><img src="assets/img/logos_real/kph_tarakan.png" alt="KPH KLHK"></div>
+                        <div class="logo-item" title="Cornell Lab of Ornithology"><img src="https://logo.clearbit.com/birds.cornell.edu" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=birds.cornell.edu&sz=128';" alt="Cornell Lab of Ornithology"></div>
+                        <div class="logo-item" title="Earth Species Project"><img src="assets/img/logos_real/earth_species_project.png" alt="Earth Species Project"></div>
+                        <div class="logo-item" title="Generation of Harmony"><img src="assets/img/logos_real/generation_of_harmony.png" alt="Generation of Harmony"></div>
+                        <div class="logo-item" title="EAC by Ruangguru"><img src="assets/img/logos_real/eac_by_ruangguru.png" alt="English Academy Ruangguru"></div>
+                        <div class="logo-item" title="Yudisium FT-UBT ke-41"><img src="assets/img/logos_real/yudisium_ft_ubt_41.png" alt="Yudisium FT-UBT"></div>
+                        <div class="logo-item" title="University of Edinburgh"><img src="assets/img/logos_real/university_of_edinburgh.png" alt="University of Edinburgh"></div>
+
+                        <!-- Set 2 (Duplicate for Infinite Loop) -->
+                        <div class="logo-item" title="Language Center (Pare)"><img src="https://logo.clearbit.com/kampunginggris.id" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=kampunginggris.id&sz=128';" alt="Language Center Pare"></div>
+                        <div class="logo-item" title="SMK IDN Boarding School"><img src="https://logo.clearbit.com/idn.sch.id" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=idn.sch.id&sz=128';" alt="SMK IDN Boarding School"></div>
+                        <div class="logo-item" title="Google Developer Group"><img src="https://logo.clearbit.com/gdg.community.dev" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=gdg.community.dev&sz=128';" alt="Google Developer Group"></div>
+                        <div class="logo-item" title="Dicoding"><img src="assets/img/logos_real/dicoding.png" alt="Dicoding"></div>
+                        <div class="logo-item" title="Perbanas Institute"><img src="assets/img/logos_real/perbanas_institute.png" alt="Perbanas Institute"></div>
+                        <div class="logo-item" title="DOT Indonesia"><img src="assets/img/logos_real/dot_indonesia.png" alt="DOT Indonesia"></div>
+                        <div class="logo-item" title="PT. PAMA"><img src="https://logo.clearbit.com/pamapersada.com" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=pamapersada.com&sz=128';" alt="PT Pamapersada Nusantara"></div>
+                        <div class="logo-item" title="SMK Darul Muslim (Bogor)"><img src="assets/img/logos_real/smk_darul_muslim.png" alt="SMK Darul Muslim"></div>
+                        <div class="logo-item" title="AYIMUN Global Network"><img src="https://logo.clearbit.com/ayimun.org" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=ayimun.org&sz=128';" alt="AYIMUN"></div>
+                        <div class="logo-item" title="UNESCO"><img src="assets/img/logos_real/unesco.png" alt="UNESCO"></div>
+                        <div class="logo-item" title="Dundalk Institute of Technology"><img src="assets/img/logos_real/dundalk_institute_of_technology.png" alt="DkIT"></div>
+                        <div class="logo-item" title="Universitas Borneo Tarakan"><img src="assets/img/logos_real/universitas_borneo_tarakan.png" alt="Universitas Borneo Tarakan (UBT)"></div>
+                        <div class="logo-item" title="CE-UBT"><img src="assets/img/logos_real/ce_ubt.png" alt="CE-UBT"></div>
+                        <div class="logo-item" title="HMTK UBT"><img src="assets/img/logos_real/hmtk_ft_ubt.png" alt="HMTK UBT"></div>
+                        <div class="logo-item" title="Meaningful Design"><img src="assets/img/logos_real/meaningful_design_group.png" alt="Meaningful Design"></div>
+                        <div class="logo-item" title="Fab Foundation"><img class="no-invert" src="https://logo.clearbit.com/fabfoundation.org" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=fabfoundation.org&sz=128';" alt="Fab Foundation"></div>
+                        <div class="logo-item" title="MIT"><img src="assets/img/logos_real/mit.png" alt="MIT"></div>
+                        <div class="logo-item" title="Pertamina Foundation"><img src="assets/img/logos_real/pertamina_foundation.png" alt="Pertamina Foundation"></div>
+                        <div class="logo-item" title="IISMA"><img src="assets/img/logos_real/iisma.png" alt="IISMA"></div>
+                        <div class="logo-item" title="Kemendikbudristek"><img src="assets/img/logos_real/kemendikbud.png" alt="Kemendikbudristek"></div>
+                        <div class="logo-item" title="University of Sussex"><img src="assets/img/logos_real/university_of_sussex.png" alt="University of Sussex"></div>
+                        <div class="logo-item" title="GDSC"><img src="https://logo.clearbit.com/gdsc.community.dev" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=gdsc.community.dev&sz=128';" alt="GDSC"></div>
+                        <div class="logo-item" title="Google Developer Expert"><img src="assets/img/logos_real/gde_by_google.png" alt="Google Developer Expert"></div>
+                        <div class="logo-item" title="BWS (PUPR)"><img src="assets/img/logos_real/bws_pupr.png" alt="BWS PUPR"></div>
+                        <div class="logo-item" title="World Water Council"><img class="no-invert" src="assets/img/logos_real/world_water_council.png" alt="World Water Council"></div>
+                        <div class="logo-item" title="BAC by Ruangguru"><img src="assets/img/logos_real/bac_by_ruangguru.png" alt="Brain Academy Ruangguru"></div>
+                        <div class="logo-item" title="BMKG"><img src="assets/img/logos_real/bkmg_tarakan.png" alt="BMKG"></div>
+                        <div class="logo-item" title="Pemprov Kaltara"><img src="https://logo.clearbit.com/kaltaraprov.go.id" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=kaltaraprov.go.id&sz=128';" alt="Pemprov Kaltara"></div>
+                        <div class="logo-item" title="KPH Tarakan"><img src="assets/img/logos_real/kph_tarakan.png" alt="KPH KLHK"></div>
+                        <div class="logo-item" title="Cornell Lab of Ornithology"><img src="https://logo.clearbit.com/birds.cornell.edu" onerror="this.onerror=null; this.src='https://www.google.com/s2/favicons?domain=birds.cornell.edu&sz=128';" alt="Cornell Lab of Ornithology"></div>
+                        <div class="logo-item" title="Earth Species Project"><img src="assets/img/logos_real/earth_species_project.png" alt="Earth Species Project"></div>
+                        <div class="logo-item" title="Generation of Harmony"><img src="assets/img/logos_real/generation_of_harmony.png" alt="Generation of Harmony"></div>
+                        <div class="logo-item" title="EAC by Ruangguru"><img src="assets/img/logos_real/eac_by_ruangguru.png" alt="English Academy Ruangguru"></div>
+                        <div class="logo-item" title="Yudisium FT-UBT ke-41"><img src="assets/img/logos_real/yudisium_ft_ubt_41.png" alt="Yudisium FT-UBT"></div>
+                        <div class="logo-item" title="University of Edinburgh"><img src="assets/img/logos_real/university_of_edinburgh.png" alt="University of Edinburgh"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
 
         <section id="gallery" class="gallery-section reveal">
