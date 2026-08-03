@@ -1939,7 +1939,7 @@
 
                     <div id="pane-language" class="resume-pane">
                         <!-- DET Score Highlight -->
-                        <div class="det-highlight reveal-item from-fade" style="
+                        <a href="https://certs.duolingo.com/t7vg7l3jqp215x98" target="_blank" rel="noopener noreferrer" class="det-highlight-link" style="
                             display: flex;
                             align-items: center;
                             gap: 18px;
@@ -1948,14 +1948,25 @@
                             border-radius: 14px;
                             padding: 18px 24px;
                             margin-bottom: 32px;
-                        ">
+                            cursor: pointer;
+                            text-decoration: none;
+                            color: inherit;
+                            transition: background 0.3s ease, border-color 0.3s ease, transform 0.25s ease, box-shadow 0.3s ease;
+                            position: relative;
+                            overflow: hidden;
+                        " onmouseenter="this.style.background='linear-gradient(135deg, rgba(99,102,241,0.22) 0%, rgba(139,92,246,0.18) 100%)';this.style.borderColor='rgba(139,92,246,0.65)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(99,102,241,0.25)';this.querySelector('.det-arrow').style.transform='translateX(4px)';this.querySelector('.det-cta').style.color='#a78bfa';"
+                           onmouseleave="this.style.background='linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(139,92,246,0.10) 100%)';this.style.borderColor='rgba(99,102,241,0.3)';this.style.transform='translateY(0)';this.style.boxShadow='none';this.querySelector('.det-arrow').style.transform='translateX(0)';this.querySelector('.det-cta').style.color='#71717a';">
                             <img src="https://logo.clearbit.com/duolingo.com" onerror="this.onerror=null;this.src='https://www.google.com/s2/favicons?domain=duolingo.com&sz=128';" alt="Duolingo" style="width:40px;height:40px;border-radius:10px;flex-shrink:0;">
-                            <div>
+                            <div style="flex:1;">
                                 <div style="font-size:0.72rem;letter-spacing:2px;text-transform:uppercase;color:#818cf8;font-weight:600;margin-bottom:4px;">Latest · Duolingo English Test</div>
                                 <div style="font-size:1.1rem;font-weight:700;color:#fafafa;">Score <span style="color:#a78bfa;">130</span> &mdash; C1 Proficient &nbsp;<span style="color:#71717a;font-size:0.9rem;font-weight:400;">≈ IELTS 7.5</span></div>
-                                <div style="font-size:0.82rem;color:#a1a1aa;margin-top:3px;">Equivalent to IELTS 7.5 &middot; CEFR C1 · Full certificate in Language section below.</div>
+                                <div style="font-size:0.82rem;color:#a1a1aa;margin-top:3px;">Equivalent to IELTS 7.5 &middot; CEFR C1</div>
                             </div>
-                        </div>
+                            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+                                <span class="det-cta" style="font-size:0.75rem;font-weight:600;color:#71717a;letter-spacing:0.5px;transition:color 0.3s ease;">View Certificate</span>
+                                <span class="det-arrow" style="font-size:1.1rem;color:#a78bfa;transition:transform 0.25s ease;">→</span>
+                            </div>
+                        </a>
                         <div class="timeline">
                             <div class="timeline-item">
                                 <div class="timeline-date">Native</div>
