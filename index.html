@@ -223,6 +223,9 @@
         }
 
         .project-card {
+            /* Flex kolom supaya tombol Visit/Read More selalu di pojok kanan bawah, sejajar antar kartu */
+            display: flex;
+            flex-direction: column;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
@@ -244,6 +247,9 @@
         }
 
         .project-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             padding: 20px;
         }
 
@@ -265,7 +271,8 @@
         }
 
         .visit-btn-container {
-            margin-top: 15px;
+            margin-top: auto;
+            padding-top: 15px;
             text-align: right;
         }
 
@@ -292,23 +299,126 @@
             color: var(--text-muted);
         }
 
-        .skills-container {
+        /* --- Skills Word Cloud --- */
+        /* Tanpa JS: grup tampil sebagai baris kata yang dibungkus (fallback).
+           Dengan JS: .is-cloud aktif, tiap kata diposisikan absolut oleh layoutSkillsCloud(). */
+        .skills-cloud {
+            --cloud-scale: 1;
+            --hover-scale: 1.35;
+            position: relative;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
+            align-items: center;
+            gap: 28px 48px;
+            max-width: 1200px;
+            margin: 0 auto;
+            transition: height 0.4s ease;
         }
 
-        .skill-pill {
-            padding: 10px 20px;
-            border: 1px solid var(--border-color);
-            border-radius: 30px;
-            font-size: 0.9rem;
-            transition: background-color 0.3s ease;
+        .skill-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: baseline;
+            gap: 4px 14px;
         }
 
-        .skill-pill:hover {
-            background-color: var(--card-bg);
+        .skills-cloud.is-cloud {
+            display: block;
+        }
+
+        .skills-cloud.is-cloud .skill-group {
+            display: contents;
+        }
+
+        .skill-word {
+            display: inline-flex;
+            line-height: 1.1;
+            white-space: nowrap;
+            cursor: default;
+        }
+
+        .skills-cloud.is-cloud .skill-word {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Hit-test ikut teks yang sudah bergeser/membesar, bukan kotak aslinya */
+            pointer-events: none;
+        }
+
+        .skills-cloud.is-cloud .skill-word > span {
+            pointer-events: auto;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .skill-word > span {
+            display: inline-block;
+            color: var(--word-color);
+            font-weight: var(--word-weight);
+            /* Di layar kecil kata besar mengecil lebih banyak, kata kecil tetap terbaca (min 0.75rem) */
+            font-size: calc(0.75rem + (var(--word-size) - 0.75rem) * var(--cloud-scale));
+            letter-spacing: -0.02em;
+            transform-origin: center;
+            /* --dx/--dy diisi JS: kata di sekitar kata yang di-hover terdorong menjauh */
+            transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(var(--s, 1));
+            transition: transform 0.55s cubic-bezier(0.25, 0.8, 0.25, 1),
+                color 0.35s ease, text-shadow 0.35s ease;
+            will-change: transform;
+        }
+
+        .skill-word[data-w="5"] { --word-size: 2.7rem; --word-weight: 700; --word-color: #fafafa; }
+        .skill-word[data-w="4"] { --word-size: 1.95rem; --word-weight: 600; --word-color: rgba(250, 250, 250, 0.9); }
+        .skill-word[data-w="3"] { --word-size: 1.35rem; --word-weight: 500; --word-color: rgba(250, 250, 250, 0.74); }
+        .skill-word[data-w="2"] { --word-size: 1.02rem; --word-weight: 400; --word-color: rgba(250, 250, 250, 0.56); }
+        .skill-word[data-w="1"] { --word-size: 0.84rem; --word-weight: 400; --word-color: rgba(250, 250, 250, 0.4); }
+
+        /* Kata aktif (hover di desktop, tap di mobile — kelas diatur JS):
+           kata lain meredup, satu grupnya tetap terang */
+        .skills-cloud.has-active .skill-word > span {
+            color: rgba(250, 250, 250, 0.16);
+        }
+
+        .skills-cloud .skill-group.is-active .skill-word > span {
+            color: rgba(250, 250, 250, 0.82);
+        }
+
+        .skills-cloud .skill-word.is-active {
+            z-index: 2;
+        }
+
+        .skills-cloud .skill-word.is-active > span {
+            --s: var(--hover-scale);
+            color: #ffffff;
+            text-shadow: 0 0 18px rgba(255, 255, 255, 0.35), 0 0 4px var(--bg-color);
+        }
+
+        .skills-caption {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .skills-caption.show {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .skills-cloud {
+                --hover-scale: 1.12;
+            }
+
+            .skill-word > span {
+                transition: color 0.2s ease;
+            }
         }
 
         /* --- Advanced Footer Design --- */
@@ -845,6 +955,11 @@
             transform: scale(0.85);
             opacity: 0.4;
             transition: transform 0.5s ease-out, opacity 0.5s ease-out, border-color 0.3s ease;
+        }
+
+        /* Dipakai saat lompat diam-diam dari kartu salinan ke kartu asli (loop carousel) */
+        .publication-wrapper.no-anim .pub-card {
+            transition: none !important;
         }
 
         .pub-card.active-center {
@@ -1384,17 +1499,105 @@
             padding: 0 5%;
         }
 
-        /* ── Filter Tabs ────────────────────────────────────────── */
-        .cert-filter-tabs {
+        /* ── Filter Dropdown (pil pemicu + panel berisi pil kategori) ── */
+        .cert-filter-wrap {
             display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
             justify-content: center;
             margin-bottom: 40px;
         }
 
+        .cert-filter {
+            position: relative;
+            z-index: 30;
+        }
+
+        .cert-filter-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.25s ease, background-color 0.25s ease;
+        }
+
+        .cert-filter-trigger:hover,
+        .cert-filter.open .cert-filter-trigger {
+            border-color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .cert-filter-trigger:focus-visible,
+        .cert-tab:focus-visible {
+            outline: 2px solid var(--text-main);
+            outline-offset: 2px;
+        }
+
+        .cert-filter-label {
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .cert-filter-current {
+            font-weight: 600;
+        }
+
+        .cert-filter-chevron {
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .cert-filter.open .cert-filter-chevron {
+            transform: rotate(180deg);
+        }
+
+        .cert-filter-tabs {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            width: max-content;
+            max-width: min(560px, calc(100vw - 32px));
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            background: rgba(24, 24, 27, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-color);
+            border-radius: 22px;
+            box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translate(-50%, -8px) scale(0.97);
+            transform-origin: top center;
+            transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0s linear 0.35s;
+        }
+
+        .cert-filter.open .cert-filter-tabs {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translate(-50%, 0) scale(1);
+            transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), visibility 0s;
+        }
+
         .cert-tab {
-            padding: 8px 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
             background: transparent;
             border: 1px solid var(--border-color);
             border-radius: 30px;
@@ -1402,8 +1605,18 @@
             font-size: 0.85rem;
             font-family: var(--font-sans);
             cursor: pointer;
-            transition: all 0.25s ease;
             letter-spacing: 0.3px;
+            opacity: 0;
+            transform: translateY(-4px);
+            transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease,
+                opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Pil muncul berurutan saat dropdown dibuka */
+        .cert-filter.open .cert-tab {
+            opacity: 1;
+            transform: none;
+            transition-delay: 0s, 0s, 0s, calc(var(--i, 0) * 25ms), calc(var(--i, 0) * 25ms);
         }
 
         .cert-tab:hover {
@@ -1417,6 +1630,30 @@
             color: var(--bg-color);
             border-color: var(--text-main);
             font-weight: 600;
+        }
+
+        .cert-tab-count {
+            min-width: 20px;
+            padding: 1px 6px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .cert-tab.active .cert-tab-count {
+            background: rgba(9, 9, 11, 0.12);
+            color: var(--bg-color);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .cert-filter-tabs,
+            .cert-filter.open .cert-filter-tabs,
+            .cert-tab {
+                transition-duration: 0.01s;
+            }
         }
 
         /* ── Masonry Grid ───────────────────────────────────────── */
@@ -2781,8 +3018,9 @@
                 <h2 class="section-title">Selected Projects</h2>
             </div>
             <div class="project-grid">
-                <a href="#" class="project-card">
-                    <img src="assets/img/AI-in-Human-Animal-Communication.webp" alt="Covid Tracker" class="project-img">
+                <a href="https://repository.ubt.ac.id/index.php?p=show_detail&amp;id=28119" target="_blank"
+                    rel="noopener" class="project-card">
+                    <img src="assets/img/AI-in-Human-Animal-Communication.webp" alt="ALFANDA bioacoustics" class="project-img">
                     <div class="project-info">
                         <h3>ALFANDA: bioacoustic detection of proboscis monkey calls</h3>
                         <p>A zero-training, cross-modal metric learning framework that classifies wild proboscis
@@ -2795,6 +3033,9 @@
                             <span class="tech-tag">Bioacoustics</span>
                             <span class="tech-tag">AI</span>
                             <span class="tech-tag">Google Colab</span>
+                        </div>
+                        <div class="visit-btn-container">
+                            <span class="visit-btn">Read More &rarr;</span>
                         </div>
                     </div>
                 </a>
@@ -2953,68 +3194,86 @@
             <div style="text-align:center; margin-bottom: 40px;">
                 <h2 class="section-title">Skills &amp; Tools</h2>
             </div>
-            <div class="skills-container" id="skills-container">
-                <div class="skill-pill">Python</div>
-                <div class="skill-pill">C/C++</div>
-                <div class="skill-pill">SQL</div>
-                <div class="skill-pill">Kotlin</div>
-                <div class="skill-pill">Swift</div>
-                <div class="skill-pill">Dart (Flutter)</div>
-                <div class="skill-pill">JavaScript</div>
-                <div class="skill-pill">PHP</div>
-                <div class="skill-pill">HTML &amp; CSS</div>
-                <div class="skill-pill">Android App Development</div>
-                <div class="skill-pill">iOS App Development</div>
-                <div class="skill-pill">Flutter (Cross-platform Development)</div>
-                <div class="skill-pill">SwiftUI</div>
-                <div class="skill-pill">Firebase Integration</div>
-                <div class="skill-pill">Web Programming</div>
-                <div class="skill-pill">Laravel</div>
-                <div class="skill-pill">Vue.js</div>
-                <div class="skill-pill">Next.js</div>
-                <div class="skill-pill">Bootstrap</div>
-                <div class="skill-pill">WordPress</div>
-                <div class="skill-pill">API Integration</div>
-                <div class="skill-pill">MySQL</div>
-                <div class="skill-pill">SQLite</div>
-                <div class="skill-pill">SQL Workbench</div>
-                <div class="skill-pill">Database Administration</div>
-                <div class="skill-pill">Database Engineering</div>
-                <div class="skill-pill">Firebase (Auth, Firestore, Realtime Database)</div>
-                <div class="skill-pill">Machine Learning</div>
-                <div class="skill-pill">Deep Learning</div>
-                <div class="skill-pill">PyTorch</div>
-                <div class="skill-pill">TensorFlow</div>
-                <div class="skill-pill">Data Analysis</div>
-                <div class="skill-pill">Prompt Engineering</div>
-                <div class="skill-pill">UI/UX Design</div>
-                <div class="skill-pill">Figma (Prototyping)</div>
-                <div class="skill-pill">Internet of Things (IoT)</div>
-                <div class="skill-pill">Sensor &amp; Aktuator</div>
-                <div class="skill-pill">Mikrokontroler</div>
-                <div class="skill-pill">Git &amp; GitHub/GitLab (Version Control)</div>
-                <div class="skill-pill">DevOps</div>
-                <div class="skill-pill">Network Planning and Infrastructure</div>
-                <div class="skill-pill">Microsoft Office</div>
-                <div class="skill-pill">Google Workspace</div>
-                <div class="skill-pill">Project Management</div>
-                <div class="skill-pill">Team Leadership</div>
-                <div class="skill-pill">Community Management</div>
-                <div class="skill-pill">Event Organizing</div>
-                <div class="skill-pill">Bahasa Inggris (IELTS Band 7.0 / C1)</div>
-                <div class="skill-pill">Public Speaking</div>
-                <div class="skill-pill">Interpreting/Translation (Penerjemah)</div>
-                <div class="skill-pill">Cross-cultural Communication</div>
-                <div class="skill-pill">Teaching/Mentoring</div>
-                <div class="skill-pill">Customer Service</div>
-                <div class="skill-pill">Sales &amp; Marketing (Field Marketing)</div>
-                <div class="skill-pill">Problem Solving</div>
-                <div class="skill-pill">Adaptability</div>
+            <!-- Word cloud: data-w = relevansi (5 = skill utama, 1 = pendukung).
+                 Skill dalam satu .skill-group akan ditata berkelompok oleh script di bawah. -->
+            <div class="skills-cloud" id="skills-cloud" aria-label="Skills &amp; Tools">
+                <div class="skill-group" data-group="AI &amp; Data" role="list">
+                    <span class="skill-word" role="listitem" data-w="5"><span>Machine Learning</span></span>
+                    <span class="skill-word" role="listitem" data-w="5"><span>Deep Learning</span></span>
+                    <span class="skill-word" role="listitem" data-w="5"><span>Python</span></span>
+                    <span class="skill-word" role="listitem" data-w="4"><span>PyTorch</span></span>
+                    <span class="skill-word" role="listitem" data-w="4"><span>TensorFlow</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Data Analysis</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Prompt Engineering</span></span>
+                </div>
+                <div class="skill-group" data-group="Mobile Development" role="list">
+                    <span class="skill-word" role="listitem" data-w="4" title="Cross-platform Development"><span>Flutter</span></span>
+                    <span class="skill-word" role="listitem" data-w="4"><span>Android App Development</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>iOS App Development</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Kotlin</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Dart</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Swift</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>SwiftUI</span></span>
+                </div>
+                <div class="skill-group" data-group="Web Development" role="list">
+                    <span class="skill-word" role="listitem" data-w="3"><span>Web Programming</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>JavaScript</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Next.js</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Laravel</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>API Integration</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>HTML &amp; CSS</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>PHP</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Vue.js</span></span>
+                    <span class="skill-word" role="listitem" data-w="1"><span>Bootstrap</span></span>
+                    <span class="skill-word" role="listitem" data-w="1"><span>WordPress</span></span>
+                </div>
+                <div class="skill-group" data-group="Database &amp; Backend" role="list">
+                    <span class="skill-word" role="listitem" data-w="3" title="Auth, Firestore, Realtime Database &amp; Integration"><span>Firebase</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>SQL</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>MySQL</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Database Engineering</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Database Administration</span></span>
+                    <span class="skill-word" role="listitem" data-w="1"><span>SQLite</span></span>
+                    <span class="skill-word" role="listitem" data-w="1"><span>SQL Workbench</span></span>
+                </div>
+                <div class="skill-group" data-group="UI/UX Design" role="list">
+                    <span class="skill-word" role="listitem" data-w="4"><span>UI/UX Design</span></span>
+                    <span class="skill-word" role="listitem" data-w="3" title="Prototyping"><span>Figma</span></span>
+                </div>
+                <div class="skill-group" data-group="IoT &amp; Embedded" role="list">
+                    <span class="skill-word" role="listitem" data-w="4" title="Internet of Things"><span>IoT</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>C/C++</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Mikrokontroler</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Sensor &amp; Aktuator</span></span>
+                </div>
+                <div class="skill-group" data-group="DevOps &amp; Infrastructure" role="list">
+                    <span class="skill-word" role="listitem" data-w="3" title="Version Control"><span>Git &amp; GitHub/GitLab</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>DevOps</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Network Planning and Infrastructure</span></span>
+                </div>
+                <div class="skill-group" data-group="Language &amp; Communication" role="list">
+                    <span class="skill-word" role="listitem" data-w="4" title="IELTS Band 7.0 / C1"><span>English &middot; IELTS 7.0</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Public Speaking</span></span>
+                    <span class="skill-word" role="listitem" data-w="2" title="Penerjemah"><span>Interpreting &amp; Translation</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Cross-cultural Communication</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Teaching/Mentoring</span></span>
+                </div>
+                <div class="skill-group" data-group="Leadership &amp; Management" role="list">
+                    <span class="skill-word" role="listitem" data-w="3"><span>Team Leadership</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"><span>Project Management</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Community Management</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Event Organizing</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Problem Solving</span></span>
+                    <span class="skill-word" role="listitem" data-w="1"><span>Adaptability</span></span>
+                </div>
+                <div class="skill-group" data-group="Business &amp; Productivity" role="list">
+                    <span class="skill-word" role="listitem" data-w="1"><span>Microsoft Office</span></span>
+                    <span class="skill-word" role="listitem" data-w="1"><span>Google Workspace</span></span>
+                    <span class="skill-word" role="listitem" data-w="1" title="Field Marketing"><span>Sales &amp; Marketing</span></span>
+                    <span class="skill-word" role="listitem" data-w="1"><span>Customer Service</span></span>
+                </div>
             </div>
-
-            <div class="project-toggle-wrapper" id="skills-toggle-wrapper" style="display: none; margin-top: 30px;">
-                <a href="#" class="cert-link" id="skills-toggle-btn">See more &rarr;</a>
-            </div>
+            <p class="skills-caption" id="skills-caption" aria-hidden="true">&nbsp;</p>
 
             <div class="cert-link-wrapper" style="display:none;">
                 <a href="https://drive.google.com/drive/folders/15sbSvJcpDUPHc9fgPz7MEAyW2BlBKVEj" class="cert-link">See
@@ -3036,7 +3295,18 @@
                     full size</p>
             </div>
 
-            <!-- Filter Tabs -->
+            <!-- Filter: pil pemicu + dropdown berisi pil kategori (jumlah per kategori diisi JS) -->
+            <div class="cert-filter-wrap">
+            <div class="cert-filter" id="cert-filter">
+            <button type="button" class="cert-filter-trigger" id="cert-filter-trigger" aria-haspopup="true"
+                aria-expanded="false" aria-controls="cert-tabs">
+                <span class="cert-filter-label">Category</span>
+                <span class="cert-filter-current" id="cert-filter-current">All</span>
+                <svg class="cert-filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
             <div class="cert-filter-tabs" id="cert-tabs">
                 <button class="cert-tab active" data-cat="all" onclick="filterCerts('all')">All</button>
                 <button class="cert-tab" data-cat="Community" onclick="filterCerts('Community')">Community</button>
@@ -3053,6 +3323,8 @@
                 <button class="cert-tab" data-cat="Webinar" onclick="filterCerts('Webinar')">Webinar</button>
                 <button class="cert-tab" data-cat="Finance" onclick="filterCerts('Finance')">Finance</button>
                 <button class="cert-tab" data-cat="Work" onclick="filterCerts('Work')">Work</button>
+            </div>
+            </div>
             </div>
 
             <!-- Masonry Grid -->
@@ -3805,10 +4077,10 @@
             stagger('.project-card', 'from-scale', 6);
 
             /* Skill pills — fade + stagger */
-            stagger('.skill-pill', 'from-fade', 8);
+            stagger('.skill-word', 'from-fade', 8);
 
             /* Filter tabs sertifikat — fade */
-            stagger('.cert-tab', 'from-fade', 8);
+            stagger('.cert-filter-wrap', 'from-fade', 8);
 
             /* Masonry gallery items — slide up */
             stagger('.masonry-item', null, 8);
@@ -4077,10 +4349,51 @@
 
             const totalCards = document.querySelectorAll('.pub-card').length;
             generateDots(totalCards);
+            setupPubLoop(container);
 
             setTimeout(() => {
+                scrollToCard(pubRealCount > 1 ? pubRealCount : 0, true);
                 updateCenterCard();
             }, 100);
+        }
+
+        // --- Loop tanpa ujung: satu set salinan kartu di kiri & kanan. Saat carousel berhenti di
+        //     salinan, posisinya dipindah diam-diam (tanpa animasi) ke kartu asli yang sama.
+        //     Jadi setelah kartu terakhir muncul kartu pertama, dan di kiri kartu pertama ada kartu terakhir.
+        let pubRealCount = 0;
+
+        function setupPubLoop(container) {
+            const realCards = Array.from(container.querySelectorAll('.pub-card'));
+            pubRealCount = realCards.length;
+            realCards.forEach((card, i) => { card.dataset.index = i; });
+            if (pubRealCount < 2) return;
+
+            const makeClone = card => {
+                const clone = card.cloneNode(true);
+                clone.dataset.clone = 'true';
+                clone.setAttribute('aria-hidden', 'true');
+                clone.tabIndex = -1;
+                return clone;
+            };
+            const before = document.createDocumentFragment();
+            realCards.forEach(card => before.appendChild(makeClone(card)));
+            container.insertBefore(before, realCards[0]);
+            realCards.forEach(card => container.appendChild(makeClone(card)));
+        }
+
+        function settlePubLoop() {
+            const wrapper = document.getElementById('pub-container');
+            const cards = wrapper.querySelectorAll('.pub-card');
+            if (pubRealCount < 2 || cards.length < pubRealCount * 3) return;
+            updateCenterCard(); // baca posisi terbaru langsung dari layout
+            const pos = currentIndex;
+            if (pos >= pubRealCount && pos < pubRealCount * 2) return; // sudah di kartu asli
+
+            const target = Number(cards[pos].dataset.index) + pubRealCount;
+            wrapper.classList.add('no-anim');
+            wrapper.scrollTo({ left: wrapper.scrollLeft + cards[target].offsetLeft - cards[pos].offsetLeft, behavior: 'instant' });
+            updateCenterCard();
+            requestAnimationFrame(() => requestAnimationFrame(() => wrapper.classList.remove('no-anim')));
         }
 
         function updateCenterCard() {
@@ -4113,7 +4426,7 @@
             });
 
             currentIndex = activeIndex;
-            updateDotsUI(currentIndex);
+            updateDotsUI(Number(closestCard.dataset.index) || 0);
         }
 
         function updateDotsUI(index) {
@@ -4130,12 +4443,12 @@
             for (let i = 0; i < total; i++) {
                 const dot = document.createElement('div');
                 dot.className = 'dot';
-                dot.addEventListener('click', () => scrollToCard(i));
+                dot.addEventListener('click', () => scrollToCard(pubRealCount > 1 ? pubRealCount + i : i));
                 dotsContainer.appendChild(dot);
             }
         }
 
-        function scrollToCard(index) {
+        function scrollToCard(index, instant) {
             const wrapper = document.getElementById('pub-container');
             const cards = wrapper.querySelectorAll('.pub-card');
 
@@ -4143,10 +4456,12 @@
                 const targetCard = cards[index];
                 const scrollPos = targetCard.offsetLeft - (wrapper.clientWidth / 2) + (targetCard.clientWidth / 2);
 
+                if (instant) wrapper.classList.add('no-anim');
                 wrapper.scrollTo({
                     left: scrollPos,
-                    behavior: 'smooth'
+                    behavior: instant ? 'instant' : 'smooth'
                 });
+                if (instant) requestAnimationFrame(() => requestAnimationFrame(() => wrapper.classList.remove('no-anim')));
             }
         }
 
@@ -4154,14 +4469,27 @@
             fetchLinksData();
 
             const wrapper = document.getElementById('pub-container');
-            wrapper.addEventListener('scroll', updateCenterCard);
-            window.addEventListener('resize', updateCenterCard);
+            // Saat scroll berhenti (tombol, swipe, atau dot), lompat dari salinan ke kartu asli
+            let pubSettleTimer;
+            wrapper.addEventListener('scroll', () => {
+                updateCenterCard();
+                clearTimeout(pubSettleTimer);
+                pubSettleTimer = setTimeout(settlePubLoop, 140);
+            });
+            window.addEventListener('resize', () => {
+                updateCenterCard();
+                clearTimeout(pubSettleTimer);
+                pubSettleTimer = setTimeout(() => scrollToCard(currentIndex, true), 140);
+            });
 
+            // Pindah dulu dari salinan ke kartu asli (kalau perlu), baru geser satu kartu
             document.getElementById('prev-btn').addEventListener('click', () => {
+                settlePubLoop();
                 scrollToCard(currentIndex - 1);
             });
 
             document.getElementById('next-btn').addEventListener('click', () => {
+                settlePubLoop();
                 scrollToCard(currentIndex + 1);
             });
         });
@@ -4302,7 +4630,6 @@
             handleGalleryMobile();
             window.addEventListener('resize', () => {
                 handleGalleryMobile();
-                if (typeof handleSkillsToggle === 'function') handleSkillsToggle();
             });
         });
 
@@ -4354,61 +4681,341 @@
             }
         }
 
-        // --- Logika Batas Skills di Mobile ---
-        let isSkillsExpanded = false;
+        // --- Skills Word Cloud ---
+        // Tiap grup dapat "wilayah" lingkaran (circle packing, grup pertama di tengah),
+        // lalu kata-katanya disusun spiral dari pusat grupnya: kata paling relevan di tengah.
+        function initSkillsCloud() {
+            const cloud = document.getElementById('skills-cloud');
+            const caption = document.getElementById('skills-caption');
+            if (!cloud) return;
 
-        function handleSkillsToggle(e) {
-            const skills = document.querySelectorAll('#skills-container .skill-pill');
-            const toggleWrapper = document.getElementById('skills-toggle-wrapper');
-            const toggleBtn = document.getElementById('skills-toggle-btn');
+            const groups = Array.from(cloud.querySelectorAll('.skill-group')).map(el => ({
+                name: el.dataset.group || '',
+                words: Array.from(el.querySelectorAll('.skill-word'))
+                    .map(w => ({ el: w, weight: Number(w.dataset.w) || 1 }))
+                    .sort((a, b) => b.weight - a.weight)
+            }));
+            if (groups.length === 0) return;
 
-            if (!toggleWrapper || !toggleBtn || skills.length === 0) return;
+            const overlaps = (a, b) =>
+                a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 
-            if (window.innerWidth <= 768) {
-                toggleWrapper.style.display = 'flex';
-                toggleWrapper.style.justifyContent = 'center';
-                if (isSkillsExpanded) {
-                    skills.forEach(skill => {
-                        if (skill.classList.contains('hidden-skill')) {
-                            skill.classList.remove('hidden-skill');
-                            skill.style.display = 'inline-block';
-                            skill.style.animation = 'none';
-                            void skill.offsetWidth;
-                            skill.style.animation = 'slideUpFade 0.6s ease forwards';
-                        }
-                    });
-                    toggleBtn.innerHTML = '&larr; See less';
-                } else {
-                    skills.forEach((skill, index) => {
-                        if (index >= 12) {
-                            skill.classList.add('hidden-skill');
-                            skill.style.display = 'none';
-                            skill.style.animation = 'none';
-                        } else {
-                            skill.classList.remove('hidden-skill');
-                            skill.style.display = 'inline-block';
-                        }
-                    });
-                    toggleBtn.innerHTML = 'See more &rarr;';
+            function place(scale, width) {
+                cloud.style.setProperty('--cloud-scale', scale);
+                const gapX = 18 * Math.max(scale, 0.4);
+                const gapY = 9 * Math.max(scale, 0.4);
 
-                    if (e && e.type === 'click') {
-                        setTimeout(() => {
-                            const skillsSection = document.getElementById('skills');
-                            if (skillsSection) {
-                                const y = skillsSection.getBoundingClientRect().top + window.scrollY - 80;
-                                window.scrollTo({ top: y, behavior: 'smooth' });
+                // Ukur semua kata sekaligus (hindari layout thrashing)
+                groups.forEach(g => g.words.forEach(w => {
+                    w.w = w.el.offsetWidth + gapX;
+                    w.h = w.el.offsetHeight + gapY;
+                }));
+
+                // Desktop 1) Susun wilayah grup: spiral elips dari tengah (grup utama di pusat), lingkaran
+                //    tidak boleh tumpang tindih. Posisi x di-clamp ke lebar container.
+                const stretch = Math.sqrt(width < 640 ? 1 : 2.4);
+                const groupGap = 8 * Math.max(scale, 0.5);
+                const half = width / 2;
+                const clampX = (x, halfSize) => {
+                    const limit = Math.max(half - halfSize, 0);
+                    return Math.max(-limit, Math.min(limit, x));
+                };
+                const placed = [];
+                const packed = [];
+
+                // Mobile: word cloud klasik. Tiap kata menempati titik kosong terdekat lewat spiral —
+                // kata pertama tiap grup dicari dari pusat awan, kata berikutnya dari titik tengah
+                // teman segrupnya. Hasilnya awan bulat yang padat, grup tetap mengumpul, grup utama di tengah.
+                if (width < 640) {
+                    groups.forEach(g => {
+                        let sumX = 0, sumY = 0, n = 0;
+                        g.words.forEach(w => {
+                            const ax = n ? sumX / n : 0, ay = n ? sumY / n : 0;
+                            let spot = null;
+                            for (let t = 0; t < 4000 && !spot; t += 0.08) {
+                                const rad = t * 1.6;
+                                const cx = clampX(ax + Math.cos(t) * rad * 1.3, w.w / 2);
+                                const cy = ay + Math.sin(t) * rad;
+                                const rect = { x: cx - w.w / 2, y: cy - w.h / 2, w: w.w, h: w.h };
+                                if (!placed.some(p => overlaps(p, rect))) spot = rect;
                             }
-                        }, 50);
-                    }
+                            w.rect = spot || { x: -w.w / 2, y: placed.length * w.h, w: w.w, h: w.h };
+                            placed.push(w.rect);
+                            sumX += w.rect.x + w.w / 2;
+                            sumY += w.rect.y + w.h / 2;
+                            n++;
+                        });
+                    });
                 }
-            } else {
-                toggleWrapper.style.display = 'none';
-                skills.forEach(skill => {
-                    skill.classList.remove('hidden-skill');
-                    skill.style.display = 'inline-block';
-                    skill.style.animation = 'none';
+
+                if (width >= 640) groups.forEach(g => {
+                    const area = g.words.reduce((sum, w) => sum + w.w * w.h, 0);
+                    const widest = Math.max(...g.words.map(w => w.w));
+                    g.r = Math.max(Math.sqrt(area * 1.15 / Math.PI), widest * 0.5);
+                    const fits = (x, y) => packed.every(p => Math.hypot(p.x - x, p.y - y) >= p.r + g.r + groupGap);
+
+                    g.x = 0;
+                    g.y = 0;
+                    for (let t = 0; t < 2000; t += 0.05) {
+                        const rad = t * 3;
+                        const x = clampX(Math.cos(t) * rad * stretch, g.r);
+                        const y = Math.sin(t) * rad / stretch;
+                        if (fits(x, y)) {
+                            g.x = x;
+                            g.y = y;
+                            break;
+                        }
+                    }
+                    packed.push(g);
                 });
+
+                // 2) Susun kata per grup: spiral dari pusat grup. Mode ketat menjaga kata tetap
+                //    di wilayah grupnya sendiri; kalau mentok, batasan itu dilepas.
+                if (width >= 640) groups.forEach(g => {
+                    const others = groups.filter(o => o !== g);
+                    g.words.forEach(w => {
+                        let spot = null;
+                        for (let strict = 1; strict >= 0 && !spot; strict--) {
+                            const maxRad = strict ? g.r * 2.2 : Infinity;
+                            for (let t = 0, rad = 0; rad < maxRad && t < 1500; t += 0.1) {
+                                rad = t * 2;
+                                const cx = clampX(g.x + Math.cos(t) * rad * 1.5, w.w / 2);
+                                const cy = g.y + Math.sin(t) * rad * 0.75;
+                                if (strict) {
+                                    const own = Math.hypot(cx - g.x, cy - g.y) / g.r;
+                                    if (others.some(o => Math.hypot(cx - o.x, cy - o.y) / o.r < own)) continue;
+                                }
+                                const rect = { x: cx - w.w / 2, y: cy - w.h / 2, w: w.w, h: w.h };
+                                if (!placed.some(p => overlaps(p, rect))) {
+                                    spot = rect;
+                                    break;
+                                }
+                            }
+                        }
+                        w.rect = spot || { x: g.x - w.w / 2, y: g.y - w.h / 2, w: w.w, h: w.h };
+                        placed.push(w.rect);
+                    });
+                });
+
+                // 3) Gravitasi: tarik tiap kata ke pusat (grup utama) sampai menempel kata lain, jadi
+                //    satu awan yang padat. Kata terdekat ke pusat ditarik duluan, jadi urutan grup
+                //    tetap terjaga. Desktop: tarikan horizontal lebih lemah supaya awan melebar.
+                //    Mobile: tarikan merata ke segala arah, jadi awan membulat dan celahnya tertutup.
+                const pullX = width < 640 ? 1 : 1 / (stretch * stretch);
+                const targetY = 0;
+                const STEP = 1.5;
+                const hits = (r, x, y) => placed.some(o =>
+                    o !== r && x < o.x + o.w && x + r.w > o.x && y < o.y + o.h && y + r.h > o.y);
+                const pullDist = r => Math.hypot((r.x + r.w / 2) * pullX, r.y + r.h / 2 - targetY);
+                for (let pass = 0; pass < (width < 640 ? 3 : 2); pass++) {
+                    placed.slice().sort((a, b) => pullDist(a) - pullDist(b)).forEach(r => {
+                        for (let i = 0; i < 600; i++) {
+                            const vx = -(r.x + r.w / 2) * pullX;
+                            const vy = targetY - (r.y + r.h / 2);
+                            const len = Math.hypot(vx, vy);
+                            if (len < STEP) break;
+                            const sx = vx / len * STEP, sy = vy / len * STEP;
+                            if (!hits(r, r.x + sx, r.y + sy)) { r.x += sx; r.y += sy; continue; }
+                            // Terhalang: coba meluncur di satu sumbu saja
+                            if (Math.abs(sy) > STEP * 0.3 && !hits(r, r.x, r.y + Math.sign(sy) * STEP)) {
+                                r.y += Math.sign(sy) * STEP;
+                                continue;
+                            }
+                            if (Math.abs(sx) > STEP * 0.3 && !hits(r, r.x + Math.sign(sx) * STEP, r.y)) {
+                                r.x += Math.sign(sx) * STEP;
+                                continue;
+                            }
+                            break;
+                        }
+                    });
+                }
+
+                let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                placed.forEach(p => {
+                    minX = Math.min(minX, p.x);
+                    minY = Math.min(minY, p.y);
+                    maxX = Math.max(maxX, p.x + p.w);
+                    maxY = Math.max(maxY, p.y + p.h);
+                });
+                return { minX, minY, width: maxX - minX, height: maxY - minY, gapX, gapY };
             }
+
+            let lastWidth = 0;
+
+            function layout() {
+                const width = cloud.clientWidth;
+                if (!width) return;
+                lastWidth = width;
+                cloud.classList.add('is-cloud');
+
+                let scale = Math.min(1, Math.max(0.45, width / 1150));
+                let box = place(scale, width);
+                for (let i = 0; i < 30 && box.width > width; i++) {
+                    scale *= 0.96;
+                    box = place(scale, width);
+                }
+
+                const offsetX = (width - box.width) / 2 - box.minX;
+                groups.forEach(g => g.words.forEach(w => {
+                    w.el.style.left = Math.round(w.rect.x + offsetX + box.gapX / 2) + 'px';
+                    w.el.style.top = Math.round(w.rect.y - box.minY + box.gapY / 2) + 'px';
+                }));
+                cloud.style.height = Math.ceil(box.height) + 'px';
+            }
+
+            layout();
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (cloud.clientWidth !== lastWidth) layout();
+                }, 150);
+            });
+
+            // Hover/tap: efek lensa. Kata aktif membesar dan SEMUA kata lain bergerak serempak menjauh
+            // darinya — yang dekat bergeser paling jauh & sedikit mengecil, makin jauh makin halus sampai
+            // diam. Transisi --dx/--dy/--s di CSS membuat gerak masuk/keluarnya halus.
+            const allWords = groups.flatMap(g => g.words.map(w => w.el));
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+            let activeWord = null;
+
+            function setOffset(el, dx, dy, scale, delayMs) {
+                const span = el.firstElementChild;
+                if (!span) return;
+                if (Math.abs(dx) > 0.2 || Math.abs(dy) > 0.2) {
+                    span.style.setProperty('--dx', dx.toFixed(1) + 'px');
+                    span.style.setProperty('--dy', dy.toFixed(1) + 'px');
+                } else {
+                    span.style.removeProperty('--dx');
+                    span.style.removeProperty('--dy');
+                }
+                if (scale && scale < 0.995) span.style.setProperty('--s', scale.toFixed(3));
+                else span.style.removeProperty('--s');
+                span.style.transitionDelay = delayMs ? Math.round(delayMs) + 'ms' : '';
+            }
+
+            function pushNeighbors(target) {
+                const hoverScale = parseFloat(getComputedStyle(cloud).getPropertyValue('--hover-scale')) || 1.3;
+                const tw = target.offsetWidth, th = target.offsetHeight;
+                const tx = target.offsetLeft + tw / 2, ty = target.offsetTop + th / 2;
+                const growX = tw * (hoverScale - 1) / 2 + 10;
+                const growY = th * (hoverScale - 1) / 2 + 6;
+                // Batas horizontal container: kata di pinggir tidak boleh terdorong keluar layar
+                const EDGE = 6, cw = cloud.clientWidth;
+                const clampOx = (it, ox) => Math.max(-EDGE - it.x, Math.min(cw + EDGE - it.w - it.x, ox));
+                const fitsOx = (it, ox) => it.x + ox >= -EDGE && it.x + ox + it.w <= cw + EDGE;
+
+                // Medan lensa: posisi tiap kata relatif ke kata aktif "di-zoom" dengan faktor 1 + g,
+                // g meluruh mulus (gaussian elips) seiring jarak. Satu medan untuk semua kata, jadi
+                // geraknya kompak dan urutan kata tidak saling silang.
+                const strength = (hoverScale - 1) * 1.25 * (0.6 + 0.4 * Math.min(1, tw / 250));
+                const sigmaX = 90 + tw * 0.6, sigmaY = 45 + th * 1.5;
+                const items = allWords.filter(el => el !== target).map(el => {
+                    const w = el.offsetWidth, h = el.offsetHeight;
+                    const x = el.offsetLeft, y = el.offsetTop;
+                    const dx = x + w / 2 - tx, dy = y + h / 2 - ty;
+                    const rho = Math.hypot(dx / sigmaX, dy / sigmaY);
+                    const g = strength * Math.exp(-rho * rho / 2);
+                    return { el, x, y, w, h, rho, k: g / strength, dist: Math.hypot(dx, dy), ox: dx * g, oy: dy * g };
+                });
+                items.forEach(it => { it.ox = clampOx(it, it.ox); });
+
+                // Pengaman: kalau masih ada yang bersentuhan, kata yang lebih jauh dari pusat bergeser
+                // sedikit lagi (jarang terjadi karena medan lensa sudah memberi ruang).
+                const PAD = 3;
+                const fixed = {
+                    x: target.offsetLeft - growX + 10, y: target.offsetTop - growY + 6,
+                    w: tw + (growX - 10) * 2, h: th + (growY - 6) * 2, ox: 0, oy: 0, dist: -1
+                };
+                const solids = [fixed, ...items];
+                for (let pass = 0; pass < 24; pass++) {
+                    let moved = false;
+                    for (let i = 0; i < solids.length; i++) {
+                        for (let j = i + 1; j < solids.length; j++) {
+                            const a = solids[i], b = solids[j];
+                            const ax = a.x + a.ox, ay = a.y + a.oy, bx = b.x + b.ox, by = b.y + b.oy;
+                            const overX = Math.min(ax + a.w, bx + b.w) - Math.max(ax, bx) + PAD;
+                            const overY = Math.min(ay + a.h, by + b.h) - Math.max(ay, by) + PAD;
+                            if (overX <= 0 || overY <= 0) continue;
+                            if (!(a.ox || a.oy || b.ox || b.oy) && a !== fixed) continue; // tumpang tindih bawaan, abaikan
+                            const outer = a.dist > b.dist ? a : b;
+                            const inner = outer === a ? b : a;
+                            // Selalu geser menjauhi pusat hover (tidak bolak-balik), pilih sumbu yang paling sedikit geraknya
+                            const sx = Math.sign(outer.x + outer.w / 2 - tx) || 1;
+                            const sy = Math.sign(outer.y + outer.h / 2 - ty) || 1;
+                            const ix = inner.x + inner.ox, iy = inner.y + inner.oy;
+                            const ux = outer.x + outer.ox, uy = outer.y + outer.oy;
+                            const shiftX = sx > 0 ? ix + inner.w + PAD - ux : ix - PAD - (ux + outer.w);
+                            const shiftY = sy > 0 ? iy + inner.h + PAD - uy : iy - PAD - (uy + outer.h);
+                            if (Math.abs(shiftX) < Math.abs(shiftY) && fitsOx(outer, outer.ox + shiftX)) outer.ox += shiftX;
+                            else outer.oy += shiftY;
+                            moved = true;
+                        }
+                    }
+                    if (!moved) break;
+                }
+
+                setOffset(target, 0, 0);
+                // Tetangga sedikit mengecil, dan geraknya beriak dari tengah ke luar
+                items.forEach(it => setOffset(it.el, it.ox, it.oy, 1 - 0.1 * it.k, Math.min(90, it.rho * 30)));
+            }
+
+            function clearActiveClasses() {
+                cloud.classList.remove('has-active');
+                cloud.querySelectorAll('.is-active').forEach(el => el.classList.remove('is-active'));
+            }
+
+            function activate(word) {
+                if (word === activeWord) return;
+                clearActiveClasses();
+                activeWord = word;
+                const group = word.closest('.skill-group');
+                cloud.classList.add('has-active');
+                word.classList.add('is-active');
+                if (group) group.classList.add('is-active');
+                if (cloud.classList.contains('is-cloud') && !reduceMotion.matches) pushNeighbors(word);
+                if (caption) {
+                    caption.textContent = group ? group.dataset.group : '';
+                    caption.classList.add('show');
+                }
+            }
+
+            function release() {
+                if (!activeWord) return;
+                activeWord = null;
+                clearActiveClasses();
+                allWords.forEach(el => setOffset(el, 0, 0));
+                if (caption) caption.classList.remove('show');
+            }
+
+            // Desktop (mouse): hover. Mobile (sentuh): tap untuk membesar, tap lagi / tap di luar untuk kembali.
+            let lastPointer = 'mouse';
+            cloud.addEventListener('pointerdown', e => { lastPointer = e.pointerType; });
+            cloud.addEventListener('pointerover', e => {
+                if (e.pointerType === 'touch') return;
+                const word = e.target.closest('.skill-word');
+                if (word) activate(word);
+            });
+            cloud.addEventListener('pointerout', e => {
+                if (e.pointerType === 'touch') return;
+                const to = e.relatedTarget;
+                if (!to || !to.closest || !to.closest('.skill-word')) release();
+            });
+            cloud.addEventListener('click', e => {
+                if (lastPointer === 'mouse') return;
+                const word = e.target.closest('.skill-word');
+                if (!word || word === activeWord) release();
+                else activate(word);
+            });
+            document.addEventListener('click', e => {
+                if (activeWord && lastPointer !== 'mouse' && !cloud.contains(e.target)) release();
+            });
+            // Di mobile, scroll memicu resize (address bar muncul/hilang), jadi hanya reset jika lebar berubah
+            window.addEventListener('resize', () => {
+                if (cloud.clientWidth !== lastWidth) release();
+            });
         }
 
         // Pasang event listener saat website selesai dimuat
@@ -4425,18 +5032,11 @@
             // Inisialisasi saat web pertama dibuka (sembunyikan project ke-4 dan seterusnya)
             handleProjectToggle();
 
-            const skillsBtn = document.getElementById('skills-toggle-btn');
-            if (skillsBtn) {
-                skillsBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    isSkillsExpanded = !isSkillsExpanded;
-                    handleSkillsToggle(e);
-                });
-            }
-            handleSkillsToggle();
+            initSkillsCloud();
 
             // ── Certificates: Parallax Tilt + Click Lightbox ────────────
             initCertCards();
+            initCertFilter();
             // Inisialisasi mobile col saja — IO yang handle reveal awal
             updateCertMobileCols();
         });
@@ -4487,12 +5087,57 @@
             certGrid.classList.toggle('cert-grid-2col', visible > 3);
         }
 
+        /* Dropdown filter sertifikat: buka/tutup, jumlah per kategori, tutup saat klik di luar / Escape */
+        function setCertFilterOpen(open) {
+            const filter = document.getElementById('cert-filter');
+            const trigger = document.getElementById('cert-filter-trigger');
+            if (!filter || !trigger) return;
+            filter.classList.toggle('open', open);
+            trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        function initCertFilter() {
+            const filter = document.getElementById('cert-filter');
+            const trigger = document.getElementById('cert-filter-trigger');
+            if (!filter || !trigger) return;
+
+            const cards = Array.from(document.querySelectorAll('.cert-card'));
+            document.querySelectorAll('.cert-tab').forEach((tab, i) => {
+                tab.dataset.label = tab.textContent.trim();
+                tab.style.setProperty('--i', i);
+                const count = tab.dataset.cat === 'all'
+                    ? cards.length
+                    : cards.filter(card => card.dataset.cat === tab.dataset.cat).length;
+                const badge = document.createElement('span');
+                badge.className = 'cert-tab-count';
+                badge.textContent = count;
+                tab.appendChild(badge);
+            });
+
+            trigger.addEventListener('click', () => setCertFilterOpen(!filter.classList.contains('open')));
+            document.addEventListener('click', e => {
+                if (filter.classList.contains('open') && !filter.contains(e.target)) setCertFilterOpen(false);
+            });
+            document.addEventListener('keydown', e => {
+                if (e.key === 'Escape' && filter.classList.contains('open')) {
+                    setCertFilterOpen(false);
+                    trigger.focus();
+                }
+            });
+        }
+
         /* Filter certificates by category */
         function filterCerts(cat) {
-            // Update tab active state
+            // Update tab active state + label di pil pemicu dropdown
             document.querySelectorAll('.cert-tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.cat === cat);
+                const isActive = tab.dataset.cat === cat;
+                tab.classList.toggle('active', isActive);
+                if (isActive) {
+                    const current = document.getElementById('cert-filter-current');
+                    if (current) current.textContent = tab.dataset.label || tab.textContent.trim();
+                }
             });
+            setCertFilterOpen(false);
 
             // Show / hide cards
             const cards = document.querySelectorAll('.cert-card');
