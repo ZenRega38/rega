@@ -347,13 +347,13 @@
             pointer-events: none;
         }
 
-        .skills-cloud.is-cloud .skill-word > span {
+        .skills-cloud.is-cloud .skill-word>span {
             pointer-events: auto;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
 
-        .skill-word > span {
+        .skill-word>span {
             display: inline-block;
             color: var(--word-color);
             font-weight: var(--word-weight);
@@ -368,19 +368,43 @@
             will-change: transform;
         }
 
-        .skill-word[data-w="5"] { --word-size: 2.7rem; --word-weight: 700; --word-color: #fafafa; }
-        .skill-word[data-w="4"] { --word-size: 1.95rem; --word-weight: 600; --word-color: rgba(250, 250, 250, 0.9); }
-        .skill-word[data-w="3"] { --word-size: 1.35rem; --word-weight: 500; --word-color: rgba(250, 250, 250, 0.74); }
-        .skill-word[data-w="2"] { --word-size: 1.02rem; --word-weight: 400; --word-color: rgba(250, 250, 250, 0.56); }
-        .skill-word[data-w="1"] { --word-size: 0.84rem; --word-weight: 400; --word-color: rgba(250, 250, 250, 0.4); }
+        .skill-word[data-w="5"] {
+            --word-size: 2.7rem;
+            --word-weight: 700;
+            --word-color: #fafafa;
+        }
+
+        .skill-word[data-w="4"] {
+            --word-size: 1.95rem;
+            --word-weight: 600;
+            --word-color: rgba(250, 250, 250, 0.9);
+        }
+
+        .skill-word[data-w="3"] {
+            --word-size: 1.35rem;
+            --word-weight: 500;
+            --word-color: rgba(250, 250, 250, 0.74);
+        }
+
+        .skill-word[data-w="2"] {
+            --word-size: 1.02rem;
+            --word-weight: 400;
+            --word-color: rgba(250, 250, 250, 0.56);
+        }
+
+        .skill-word[data-w="1"] {
+            --word-size: 0.84rem;
+            --word-weight: 400;
+            --word-color: rgba(250, 250, 250, 0.4);
+        }
 
         /* Kata aktif (hover di desktop, tap di mobile — kelas diatur JS):
            kata lain meredup, satu grupnya tetap terang */
-        .skills-cloud.has-active .skill-word > span {
+        .skills-cloud.has-active .skill-word>span {
             color: rgba(250, 250, 250, 0.16);
         }
 
-        .skills-cloud .skill-group.is-active .skill-word > span {
+        .skills-cloud .skill-group.is-active .skill-word>span {
             color: rgba(250, 250, 250, 0.82);
         }
 
@@ -388,7 +412,7 @@
             z-index: 2;
         }
 
-        .skills-cloud .skill-word.is-active > span {
+        .skills-cloud .skill-word.is-active>span {
             --s: var(--hover-scale);
             color: #ffffff;
             text-shadow: 0 0 18px rgba(255, 255, 255, 0.35), 0 0 4px var(--bg-color);
@@ -416,7 +440,7 @@
                 --hover-scale: 1.12;
             }
 
-            .skill-word > span {
+            .skill-word>span {
                 transition: color 0.2s ease;
             }
         }
@@ -1649,6 +1673,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+
             .cert-filter-tabs,
             .cert-filter.open .cert-filter-tabs,
             .cert-tab {
@@ -3020,7 +3045,8 @@
             <div class="project-grid">
                 <a href="https://repository.ubt.ac.id/index.php?p=show_detail&amp;id=28119" target="_blank"
                     rel="noopener" class="project-card">
-                    <img src="assets/img/AI-in-Human-Animal-Communication.webp" alt="ALFANDA bioacoustics" class="project-img">
+                    <img src="assets/img/AI-in-Human-Animal-Communication.webp" alt="ALFANDA bioacoustics"
+                        class="project-img">
                     <div class="project-info">
                         <h3>ALFANDA: bioacoustic detection of proboscis monkey calls</h3>
                         <p>A zero-training, cross-modal metric learning framework that classifies wild proboscis
@@ -3207,7 +3233,8 @@
                     <span class="skill-word" role="listitem" data-w="3"><span>Prompt Engineering</span></span>
                 </div>
                 <div class="skill-group" data-group="Mobile Development" role="list">
-                    <span class="skill-word" role="listitem" data-w="4" title="Cross-platform Development"><span>Flutter</span></span>
+                    <span class="skill-word" role="listitem" data-w="4"
+                        title="Cross-platform Development"><span>Flutter</span></span>
                     <span class="skill-word" role="listitem" data-w="4"><span>Android App Development</span></span>
                     <span class="skill-word" role="listitem" data-w="3"><span>iOS App Development</span></span>
                     <span class="skill-word" role="listitem" data-w="3"><span>Kotlin</span></span>
@@ -3228,7 +3255,8 @@
                     <span class="skill-word" role="listitem" data-w="1"><span>WordPress</span></span>
                 </div>
                 <div class="skill-group" data-group="Database &amp; Backend" role="list">
-                    <span class="skill-word" role="listitem" data-w="3" title="Auth, Firestore, Realtime Database &amp; Integration"><span>Firebase</span></span>
+                    <span class="skill-word" role="listitem" data-w="3"
+                        title="Auth, Firestore, Realtime Database &amp; Integration"><span>Firebase</span></span>
                     <span class="skill-word" role="listitem" data-w="3"><span>SQL</span></span>
                     <span class="skill-word" role="listitem" data-w="2"><span>MySQL</span></span>
                     <span class="skill-word" role="listitem" data-w="2"><span>Database Engineering</span></span>
@@ -3241,20 +3269,25 @@
                     <span class="skill-word" role="listitem" data-w="3" title="Prototyping"><span>Figma</span></span>
                 </div>
                 <div class="skill-group" data-group="IoT &amp; Embedded" role="list">
-                    <span class="skill-word" role="listitem" data-w="4" title="Internet of Things"><span>IoT</span></span>
+                    <span class="skill-word" role="listitem" data-w="4"
+                        title="Internet of Things"><span>IoT</span></span>
                     <span class="skill-word" role="listitem" data-w="3"><span>C/C++</span></span>
                     <span class="skill-word" role="listitem" data-w="3"><span>Mikrokontroler</span></span>
                     <span class="skill-word" role="listitem" data-w="2"><span>Sensor &amp; Aktuator</span></span>
                 </div>
                 <div class="skill-group" data-group="DevOps &amp; Infrastructure" role="list">
-                    <span class="skill-word" role="listitem" data-w="3" title="Version Control"><span>Git &amp; GitHub/GitLab</span></span>
+                    <span class="skill-word" role="listitem" data-w="3" title="Version Control"><span>Git &amp;
+                            GitHub/GitLab</span></span>
                     <span class="skill-word" role="listitem" data-w="2"><span>DevOps</span></span>
-                    <span class="skill-word" role="listitem" data-w="2"><span>Network Planning and Infrastructure</span></span>
+                    <span class="skill-word" role="listitem" data-w="2"><span>Network Planning and
+                            Infrastructure</span></span>
                 </div>
                 <div class="skill-group" data-group="Language &amp; Communication" role="list">
-                    <span class="skill-word" role="listitem" data-w="4" title="IELTS Band 7.0 / C1"><span>English &middot; IELTS 7.0</span></span>
+                    <span class="skill-word" role="listitem" data-w="4" title="IELTS Band 7.0 / C1"><span>English
+                            &middot; IELTS 7.0</span></span>
                     <span class="skill-word" role="listitem" data-w="3"><span>Public Speaking</span></span>
-                    <span class="skill-word" role="listitem" data-w="2" title="Penerjemah"><span>Interpreting &amp; Translation</span></span>
+                    <span class="skill-word" role="listitem" data-w="2" title="Penerjemah"><span>Interpreting &amp;
+                            Translation</span></span>
                     <span class="skill-word" role="listitem" data-w="2"><span>Cross-cultural Communication</span></span>
                     <span class="skill-word" role="listitem" data-w="2"><span>Teaching/Mentoring</span></span>
                 </div>
@@ -3269,7 +3302,8 @@
                 <div class="skill-group" data-group="Business &amp; Productivity" role="list">
                     <span class="skill-word" role="listitem" data-w="1"><span>Microsoft Office</span></span>
                     <span class="skill-word" role="listitem" data-w="1"><span>Google Workspace</span></span>
-                    <span class="skill-word" role="listitem" data-w="1" title="Field Marketing"><span>Sales &amp; Marketing</span></span>
+                    <span class="skill-word" role="listitem" data-w="1" title="Field Marketing"><span>Sales &amp;
+                            Marketing</span></span>
                     <span class="skill-word" role="listitem" data-w="1"><span>Customer Service</span></span>
                 </div>
             </div>
@@ -3297,34 +3331,35 @@
 
             <!-- Filter: pil pemicu + dropdown berisi pil kategori (jumlah per kategori diisi JS) -->
             <div class="cert-filter-wrap">
-            <div class="cert-filter" id="cert-filter">
-            <button type="button" class="cert-filter-trigger" id="cert-filter-trigger" aria-haspopup="true"
-                aria-expanded="false" aria-controls="cert-tabs">
-                <span class="cert-filter-label">Category</span>
-                <span class="cert-filter-current" id="cert-filter-current">All</span>
-                <svg class="cert-filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-            </button>
-            <div class="cert-filter-tabs" id="cert-tabs">
-                <button class="cert-tab active" data-cat="all" onclick="filterCerts('all')">All</button>
-                <button class="cert-tab" data-cat="Community" onclick="filterCerts('Community')">Community</button>
-                <button class="cert-tab" data-cat="Competitions"
-                    onclick="filterCerts('Competitions')">Competitions</button>
-                <button class="cert-tab" data-cat="Programming"
-                    onclick="filterCerts('Programming')">Programming</button>
-                <button class="cert-tab" data-cat="International"
-                    onclick="filterCerts('International')">International</button>
-                <button class="cert-tab" data-cat="Scholarship"
-                    onclick="filterCerts('Scholarship')">Scholarship</button>
-                <button class="cert-tab" data-cat="Language" onclick="filterCerts('Language')">Language</button>
-                <button class="cert-tab" data-cat="Seminar" onclick="filterCerts('Seminar')">Seminar</button>
-                <button class="cert-tab" data-cat="Webinar" onclick="filterCerts('Webinar')">Webinar</button>
-                <button class="cert-tab" data-cat="Finance" onclick="filterCerts('Finance')">Finance</button>
-                <button class="cert-tab" data-cat="Work" onclick="filterCerts('Work')">Work</button>
-            </div>
-            </div>
+                <div class="cert-filter" id="cert-filter">
+                    <button type="button" class="cert-filter-trigger" id="cert-filter-trigger" aria-haspopup="true"
+                        aria-expanded="false" aria-controls="cert-tabs">
+                        <span class="cert-filter-label">Category</span>
+                        <span class="cert-filter-current" id="cert-filter-current">All</span>
+                        <svg class="cert-filter-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="cert-filter-tabs" id="cert-tabs">
+                        <button class="cert-tab active" data-cat="all" onclick="filterCerts('all')">All</button>
+                        <button class="cert-tab" data-cat="Community"
+                            onclick="filterCerts('Community')">Community</button>
+                        <button class="cert-tab" data-cat="Competitions"
+                            onclick="filterCerts('Competitions')">Competitions</button>
+                        <button class="cert-tab" data-cat="Programming"
+                            onclick="filterCerts('Programming')">Programming</button>
+                        <button class="cert-tab" data-cat="International"
+                            onclick="filterCerts('International')">International</button>
+                        <button class="cert-tab" data-cat="Scholarship"
+                            onclick="filterCerts('Scholarship')">Scholarship</button>
+                        <button class="cert-tab" data-cat="Language" onclick="filterCerts('Language')">Language</button>
+                        <button class="cert-tab" data-cat="Seminar" onclick="filterCerts('Seminar')">Seminar</button>
+                        <button class="cert-tab" data-cat="Webinar" onclick="filterCerts('Webinar')">Webinar</button>
+                        <button class="cert-tab" data-cat="Finance" onclick="filterCerts('Finance')">Finance</button>
+                        <button class="cert-tab" data-cat="Work" onclick="filterCerts('Work')">Work</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Masonry Grid -->
@@ -4220,16 +4255,16 @@
                 customImage: "https://ce.ubt.ac.id/wp-content/uploads/2022/10/fab-fest.jpg"
             },
             {
-                url: "https://www.linkedin.com/posts/idn-boarding-school_bismillah-masyaaallah-tabaarokallah-activity-6902474305570000896-KbLE/",
-                title: "Conditional Offer from Dundalk Institute of Technology, Ireland",
-                description: "IDN Boarding School congratulates Rega Rizkan Azizan, SMK IDN Batch 3 Software Engineering student, on receiving a Conditional Letter of Offer for the International Foundation Programme, BSc (Hons) in Computing Software Development.",
-                customImage: "https://media.licdn.com/dms/image/v2/C5622AQH5hg6uyUmfKg/feedshare-shrink_1280/feedshare-shrink_1280/0/1645678114857?e=2147483647&v=beta&t=2cbOv9unIc8uu8-uv6i6kHpFCo-U-FUwwqDBiypb9Mk"
-            },
-            {
                 url: "https://www.instagram.com/p/CgVsLJUBWQO/",
                 title: "Accepted to Computer Engineering at Universitas Borneo Tarakan via SMUBT 2022",
                 description: "IDN Boarding School congratulates Rega Rizkan Azizan, SMK IDN Batch 3 alumnus, on passing the first stage of the 2022 Universitas Borneo Tarakan admission selection (SMUBT) for Computer Engineering.",
                 customImage: null
+            },
+            {
+                url: "https://www.linkedin.com/posts/idn-boarding-school_bismillah-masyaaallah-tabaarokallah-activity-6902474305570000896-KbLE/",
+                title: "Conditional Offer from Dundalk Institute of Technology, Ireland",
+                description: "IDN Boarding School congratulates Rega Rizkan Azizan, SMK IDN Batch 3 Software Engineering student, on receiving a Conditional Letter of Offer for the International Foundation Programme, BSc (Hons) in Computing Software Development.",
+                customImage: "https://media.licdn.com/dms/image/v2/C5622AQH5hg6uyUmfKg/feedshare-shrink_1280/feedshare-shrink_1280/0/1645678114857?e=2147483647&v=beta&t=2cbOv9unIc8uu8-uv6i6kHpFCo-U-FUwwqDBiypb9Mk"
             }
         ];
 
